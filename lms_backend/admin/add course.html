@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Learning - Add Course</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <!-- HEADER -->
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Add Course</h1>
+      <div class="header-right">
+        <div class="search-bar">
+          <input id="globalSearch" placeholder="Search courses..." />
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="header-icons">
+          <div class="notif" id="notifBell" title="Notifications (click)">
+            <i class="fas fa-bell"></i>
+            <span id="notifBadge" class="badge">0</span>
+          </div>
+          <button id="logoutBtn" class="logout">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ADD COURSE FORM -->
+    <section class="form-section">
+      <form id="addCourseForm" class="add-course-form">
+        <div class="form-group">
+          <label for="courseTitle">Course Title</label>
+          <input type="text" id="courseTitle" name="courseTitle" placeholder="Enter course title" required />
+        </div>
+        <div class="form-group">
+          <label for="courseDuration">Duration</label>
+          <input type="text" id="courseDuration" name="courseDuration" placeholder="e.g. 3 months" required />
+        </div>
+        <div class="form-group">
+          <label for="coursePopularity">Popularity</label>
+          <input type="number" id="coursePopularity" name="coursePopularity" min="0" placeholder="Enter popularity number" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">Add Course</button>
+          <button type="reset" class="btn-reset">Reset</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/assets/js/admin.js"></script>
+  <script>
+    document.getElementById('addCourseForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = this.courseTitle.value.trim();
+      const duration = this.courseDuration.value.trim();
+      const popularity = this.coursePopularity.value.trim();
+
+      if (!title || !duration || !popularity) {
+        alert('Please fill all fields.');
+        return;
+      }
+
+      alert(`Course Added:\nTitle: ${title}\nDuration: ${duration}\nPopularity: ${popularity}`);
+      this.reset();
+    });
+  </script>
+</body>
+</html>

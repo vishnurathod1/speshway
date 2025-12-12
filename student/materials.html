@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Materials - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html" class="active"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Study Materials</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Available Study Materials</h2>
+      <div class="form-group" style="max-width: 300px; margin-bottom: 20px;">
+        <label for="courseFilter" style="font-weight: 600; display: block; margin-bottom: 5px;">Filter by Course:</label>
+        <select id="courseFilter" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+          <option value="all">All Courses</option>
+          <option value="mathematics">Mathematics</option>
+          <option value="science">Science</option>
+        </select>
+      </div>
+      <div class="table-container">
+        <table id="materialsTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Course</th>
+              <th>Type</th>
+              <th>Uploaded</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Math Formulas</td>
+              <td>Mathematics</td>
+              <td>PDF</td>
+              <td>2024-09-15</td>
+              <td><button onclick="downloadMaterial('Math Formulas')">Download</button></td>
+            </tr>
+            <tr>
+              <td>Science Notes</td>
+              <td>Science</td>
+              <td>DOCX</td>
+              <td>2024-09-20</td>
+              <td><button onclick="downloadMaterial('Science Notes')">Download</button></td>
+            </tr>
+            <tr>
+              <td>History Timeline</td>
+              <td>History</td>
+              <td>PPT</td>
+              <td>2024-09-25</td>
+              <td><button onclick="downloadMaterial('History Timeline')">Download</button></td>
+            </tr>
+            <tr>
+              <td>Physics Equations</td>
+              <td>Science</td>
+              <td>PDF</td>
+              <td>2024-10-01</td>
+              <td><button onclick="downloadMaterial('Physics Equations')">Download</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mapping of material titles to file paths
+    const materialFiles = {
+      "Math Formulas": "/assets/files/math-formulas.pdf",
+      "Science Notes": "/assets/files/science-notes.docx",
+      "History Timeline": "/assets/files/history-timeline.ppt",
+      "Physics Equations": "/assets/files/physics-equations.pdf",
+      "Chemistry Handbook": "/assets/files/chemistry-handbook.docx",
+      "Biology Diagrams": "/assets/files/biology-diagrams.ppt",
+      "CS Tutorials": "/assets/files/cs-tutorials.pdf"
+    };
+
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = '../student/student-login.html';
+    });
+
+    function downloadMaterial(title) {
+      const filePath = materialFiles[title];
+      if (filePath) {
+        const link = document.createElement('a');
+        link.href = filePath;
+        link.download = title.replace(/\s+/g, '-').toLowerCase() + '.' + filePath.split('.').pop();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert('File not found for: ' + title);
+      }
+    }
+
+    // Filter materials by course
+    document.getElementById('courseFilter').addEventListener('change', (e) => {
+      const selectedCourse = e.target.value;
+      const rows = document.querySelectorAll('#materialsTable tbody tr');
+
+      rows.forEach(row => {
+        const courseCell = row.cells[1].textContent.toLowerCase();
+        if (selectedCourse === 'all' || courseCell.includes(selectedCourse)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

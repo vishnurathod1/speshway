@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script defer src="/assets/js/dashboard.js"></script>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Settings</h1>
+      <div class="profile">
+        <button onclick="openModal('editProfileModal')">Edit Profile</button>
+      </div>
+    </header>
+
+    <div class="section">
+      <div class="table-container">
+        <h3>Admin Profile</h3>
+        <p><b>Name:</b> John Doe</p>
+        <p><b>Email:</b> admin@example.com</p>
+        <p><b>Role:</b> Super Admin</p>
+        <p><b>Department:</b> Administration</p>
+        <p><b>Join Date:</b> 2024-01-01</p>
+      </div>
+
+      <div class="table-container">
+        <h3>System Preferences</h3>
+        <ul>
+          <li>Theme: Dark Mode</li>
+          <li>Language: English</li>
+          <li>Notifications: Enabled</li>
+          <li>Email Alerts: On</li>
+          <li>Auto Backup: Daily</li>
+          <li>Session Timeout: 30 minutes</li>
+        </ul>
+      </div>
+
+      <div class="table-container">
+        <h3>Security Settings</h3>
+        <ul>
+          <li>Two-Factor Authentication: Enabled</li>
+          <li>Password Expiry: 90 days</li>
+          <li>Login Attempts: 5</li>
+          <li>IP Whitelist: Disabled</li>
+        </ul>
+      </div>
+
+      <div class="table-container">
+        <h3>Course Settings</h3>
+        <ul>
+          <li>Max Students per Course: 100</li>
+          <li>Assignment Deadline: 7 days</li>
+          <li>Quiz Duration: 60 minutes</li>
+          <li>Video Quality: HD</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="editProfileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('editProfileModal')">&times;</span>
+      <h3>Edit Profile</h3>
+      <input type="text" id="editFullName" placeholder="Full Name" value="John Doe">
+      <input type="email" id="editEmail" placeholder="Email" value="admin@example.com">
+      <input type="password" id="editPassword" placeholder="Change Password">
+      <button onclick="saveProfileChanges()">Save Changes</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function saveProfileChanges() {
+      const fullName = document.getElementById('editFullName').value.trim();
+      const email = document.getElementById('editEmail').value.trim();
+      const password = document.getElementById('editPassword').value;
+
+      if (!fullName || !email) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Update the profile display
+      const profileContainers = document.querySelectorAll('.table-container');
+      if (profileContainers.length > 0) {
+        // The first .table-container is Admin Profile
+        const adminProfile = profileContainers[0];
+        const paragraphs = adminProfile.querySelectorAll('p');
+        paragraphs.forEach(p => {
+          if (p.innerHTML.startsWith('<b>Name:</b>')) {
+            p.innerHTML = `<b>Name:</b> ${fullName}`;
+          } else if (p.innerHTML.startsWith('<b>Email:</b>')) {
+            p.innerHTML = `<b>Email:</b> ${email}`;
+          }
+        });
+      }
+
+      // If password changed, show message (in real app, would update server)
+      if (password) {
+        alert('Password updated successfully!');
+      }
+
+      alert('Profile updated successfully!');
+      closeModal('editProfileModal');
+    }
+  </script>
+</body>
+</html>

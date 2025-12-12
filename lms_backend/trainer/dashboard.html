@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Learning - Trainer Dashboard</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <!-- HEADER -->
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Trainer Dashboard - Happy Learning LMS</h1>
+      <div class="header-right">
+        <div class="search-bar" style="position: relative; display: inline-block;">
+          <input id="globalSearch" placeholder="Search courses / students..." style="padding-right: 35px;" />
+          <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none;"></i>
+        </div>
+      <div class="header-icons">
+        <div class="notif" id="notifBell" title="Notifications (click)">
+          <i class="fas fa-bell"></i>
+          <span id="notifBadge" class="badge">0</span>
+        </div>
+        <div class="profile-circle" onclick="openProfileModal()"></div>
+        <div class="profile-info">
+          Trainer<br/><small>Mathematics</small>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+      </div>
+    </header>
+
+    <!-- STATS -->
+    <section class="stats" id="stats">
+      <div class="card" onclick="window.location.href='my-courses.html'">
+        <div class="card-title">📚 My Courses</div>
+        <h3 id="courseCount">2</h3>
+      </div>
+      <div class="card" onclick="window.location.href='my-students.html'">
+        <div class="card-title">👨‍🎓 My Students</div>
+        <h3 id="studentCount">15</h3>
+      </div>
+      <div class="card" onclick="window.location.href='my-assignments.html'">
+        <div class="card-title">📝 Assignments</div>
+        <h3 id="assignmentCount">5</h3>
+      </div>
+      <div class="card" onclick="window.location.href='live-classes.html'">
+        <div class="card-title">🎥 Classes</div>
+        <h3 id="classCount">10</h3>
+      </div>
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="quick-actions">
+      <button onclick="openAddModal('assignment')">➕ Create Assignment</button>
+      <button onclick="openAddModal('material')">➕ Upload Material</button>
+      <button onclick="openAddModal('live-class')">➕ Schedule Live Class</button>
+      <button onclick="openAddModal('recorded-class')">➕ Upload Recorded Class</button>
+      <button onclick="openLeaveRequestModal()">📅 Request Leave</button>
+    </section>
+
+    <!-- RECENT ACTIVITIES -->
+    <div class="section">
+      <div class="table-container">
+        <h3>My Recent Assignments</h3>
+        <table id="assignmentTable">
+          <thead><tr><th>Title</th><th>Course</th><th>Due Date</th><th>Submissions</th></tr></thead>
+          <tbody>
+            <tr><td>Algebra Basics</td><td>Mathematics</td><td>2024-10-15</td><td>12/15</td></tr>
+            <tr><td>Geometry Problems</td><td>Mathematics</td><td>2024-10-20</td><td>8/15</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-container">
+        <h3>Upcoming Live Classes</h3>
+        <table id="liveClassTable">
+          <thead><tr><th>Title</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Advanced Calculus</td><td>2024-10-12</td><td>10:00 AM</td><td><button onclick="joinLiveClass('Advanced Calculus')">Join</button></td></tr>
+            <tr><td>Trigonometry</td><td>2024-10-14</td><td>2:00 PM</td><td><button onclick="joinLiveClass('Trigonometry')">Join</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STUDENT PERFORMANCE -->
+    <div class="section">
+      <div class="table-container">
+        <h3>Student Performance</h3>
+        <table id="performanceTable">
+          <thead><tr><th>Student</th><th>Course</th><th>Grade</th><th>Attendance</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>John Doe</td><td>Mathematics</td><td>A</td><td>95%</td><td><button onclick="viewStudent('John Doe')">View</button></td></tr>
+            <tr><td>Jane Smith</td><td>Mathematics</td><td>B+</td><td>88%</td><td><button onclick="viewStudent('Jane Smith')">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODALS -->
+  <!-- Add Assignment Modal -->
+  <div class="modal" id="modalAssignment">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalAssignment')">&times;</span>
+      <h3>Create Assignment</h3>
+      <input id="assignmentTitle" placeholder="Title" />
+      <input id="assignmentCourse" placeholder="Course" />
+      <input id="assignmentDue" type="date" />
+      <textarea id="assignmentDesc" placeholder="Description"></textarea>
+      <button onclick="saveAssignment()">Save</button>
+    </div>
+  </div>
+
+  <!-- Upload Material Modal -->
+  <div class="modal" id="modalMaterial">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalMaterial')">&times;</span>
+      <h3>Upload Material</h3>
+      <input id="materialTitle" placeholder="Title" />
+      <input id="materialCourse" placeholder="Course" />
+      <input id="materialFile" type="file" />
+      <textarea id="materialDesc" placeholder="Description"></textarea>
+      <button onclick="saveMaterial()">Upload</button>
+    </div>
+  </div>
+
+  <!-- Schedule Live Class Modal -->
+  <div class="modal" id="modalLiveclass">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalLiveclass')">&times;</span>
+      <h3>Schedule Live Class</h3>
+      <input id="liveClassTitle" placeholder="Title" />
+      <input id="liveClassCourse" placeholder="Course" />
+      <input id="liveClassDate" type="date" />
+      <input id="liveClassTime" type="time" />
+      <textarea id="liveClassDesc" placeholder="Description"></textarea>
+      <button onclick="saveLiveClass()">Schedule</button>
+    </div>
+  </div>
+
+  <!-- Upload Recorded Class Modal -->
+  <div class="modal" id="modalRecordedclass">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalRecordedclass')">&times;</span>
+      <h3>Upload Recorded Class</h3>
+      <input id="recordedClassTitle" placeholder="Title" />
+      <input id="recordedClassCourse" placeholder="Course" />
+      <input id="recordedClassFile" type="file" />
+      <textarea id="recordedClassDesc" placeholder="Description"></textarea>
+      <button onclick="saveRecordedClass()">Upload</button>
+    </div>
+  </div>
+
+  <!-- Leave Request Modal -->
+  <div class="modal" id="modalLeaveRequest">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalLeaveRequest')">&times;</span>
+      <h3>Request Leave</h3>
+      <input id="leaveStartDate" type="date" placeholder="Start Date" />
+      <input id="leaveEndDate" type="date" placeholder="End Date" />
+      <textarea id="leaveReason" placeholder="Reason for leave"></textarea>
+      <button onclick="submitLeaveRequest()">Submit Request</button>
+    </div>
+  </div>
+
+  <script src="/assets/js/trainer-dashboard.js"></script>
+  <script src="/assets/js/auth.js"></script>
+
+
+
+</body>
+</html>

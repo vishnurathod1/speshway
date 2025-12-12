@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trainer Attendance - Mark Attendance</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    .attendance-table th, .attendance-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .attendance-table th {
+      background: #f8f9fa;
+      color: #333;
+      font-weight: 600;
+    }
+    .attendance-table tbody tr:nth-child(odd) {
+      background-color: #f9faff;
+    }
+    .attendance-table tbody tr:hover {
+      background-color: #e0f7ff;
+    }
+    .attendance-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .date-picker {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-group {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      background: linear-gradient(45deg, #00d4ff, #005f99);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #005f99, #00d4ff);
+    }
+    .time-input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #ffffff;
+      color: #333;
+    }
+    .notes-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #ffffff;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="trainer-attendance.html" class="active"><i class="fas fa-calendar-check"></i> Mark Attendance</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="students.html"><i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="trainers.html"><i class="fas fa-chalkboard-teacher"></i> Trainers</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Attendance</h1>
+      <div class="date-picker">
+        <label for="attendanceDate">Select Date: </label>
+        <input type="date" id="attendanceDate" />
+      </div>
+      <div class="btn-group">
+        <button class="btn" id="saveAttendanceBtn">Save Attendance</button>
+        <button class="btn" id="clearAttendanceBtn">Clear Attendance</button>
+      </div>
+    </header>
+
+    <section class="attendance-container">
+      <h2>Trainer Attendance</h2>
+      <table class="attendance-table" id="trainerAttendanceTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Present</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Mr. Alex</td><td><input type="checkbox" class="trainer-attendance" data-name="Mr. Alex" /></td></tr>
+          <tr><td>Ms. Emma</td><td><input type="checkbox" class="trainer-attendance" data-name="Ms. Emma" /></td></tr>
+          <tr><td>Dr. Smith</td><td><input type="checkbox" class="trainer-attendance" data-name="Dr. Smith" /></td></tr>
+          <tr><td>Prof. Johnson</td><td><input type="checkbox" class="trainer-attendance" data-name="Prof. Johnson" /></td></tr>
+          <tr><td>Mr. Lee</td><td><input type="checkbox" class="trainer-attendance" data-name="Mr. Lee" /></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Students Attendance</h2>
+      <table class="attendance-table" id="studentsAttendanceTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Present</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>John Doe</td><td><input type="checkbox" class="student-attendance" data-name="John Doe" /></td></tr>
+          <tr><td>Jane Smith</td><td><input type="checkbox" class="student-attendance" data-name="Jane Smith" /></td></tr>
+          <tr><td>Mark Lee</td><td><input type="checkbox" class="student-attendance" data-name="Mark Lee" /></td></tr>
+          <tr><td>Emily Davis</td><td><input type="checkbox" class="student-attendance" data-name="Emily Davis" /></td></tr>
+          <tr><td>Alice Johnson</td><td><input type="checkbox" class="student-attendance" data-name="Alice Johnson" /></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const attendanceDateInput = document.getElementById('attendanceDate');
+    const saveBtn = document.getElementById('saveAttendanceBtn');
+    const clearBtn = document.getElementById('clearAttendanceBtn');
+
+    // Default names (in a real app, this would come from a database)
+    const defaultStudents = ['John Doe', 'Jane Smith', 'Mark Lee', 'Emily Davis', 'Alice Johnson'];
+    const defaultTrainers = ['Mr. Alex', 'Ms. Emma', 'Dr. Smith', 'Prof. Johnson', 'Mr. Lee'];
+
+    // Set default date to today
+    attendanceDateInput.valueAsDate = new Date();
+
+    function getAttendanceKey(date) {
+      return `attendance_${date}`;
+    }
+
+    function saveAttendance() {
+      const date = attendanceDateInput.value;
+      if (!date) {
+        alert('Please select a date to save attendance.');
+        return;
+      }
+
+      const attendanceData = {
+        students: {},
+        trainers: {}
+      };
+
+      document.querySelectorAll('.student-attendance').forEach(cb => {
+        attendanceData.students[cb.dataset.name] = cb.checked;
+      });
+
+      document.querySelectorAll('.trainer-attendance').forEach(cb => {
+        attendanceData.trainers[cb.dataset.name] = cb.checked;
+      });
+
+      localStorage.setItem(getAttendanceKey(date), JSON.stringify(attendanceData));
+      alert('Attendance saved for ' + date);
+    }
+
+    function loadAttendance() {
+      const date = attendanceDateInput.value;
+      if (!date) return;
+
+      const savedData = localStorage.getItem(getAttendanceKey(date));
+      let attendanceData = { students: {}, trainers: {} };
+
+      if (savedData) {
+        attendanceData = JSON.parse(savedData);
+      }
+
+      // Populate checkboxes
+      populateCheckboxes(attendanceData);
+    }
+
+    function populateCheckboxes(data) {
+      // Students
+      defaultStudents.forEach(name => {
+        const cb = document.querySelector(`.student-attendance[data-name="${name}"]`);
+        if (cb) cb.checked = data.students[name] || false;
+      });
+
+      // Trainers
+      defaultTrainers.forEach(name => {
+        const cb = document.querySelector(`.trainer-attendance[data-name="${name}"]`);
+        if (cb) cb.checked = data.trainers[name] || false;
+      });
+    }
+
+    function clearAttendanceCheckboxes() {
+      document.querySelectorAll('.student-attendance, .trainer-attendance').forEach(cb => {
+        cb.checked = false;
+      });
+    }
+
+    attendanceDateInput.addEventListener('change', loadAttendance);
+    saveBtn.addEventListener('click', saveAttendance);
+    clearBtn.addEventListener('click', () => {
+      clearAttendanceCheckboxes();
+      alert('Attendance cleared for current date selection.');
+    });
+
+    // Load attendance for default date on page load
+    window.addEventListener('DOMContentLoaded', loadAttendance);
+  </script>
+</body>
+</html>

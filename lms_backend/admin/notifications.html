@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Learning - Notifications</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      .notifications-section {
+        max-width: 800px;
+        margin: 20px auto;
+        background: #2a2738;
+        padding: 20px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      }
+      .notifications-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .notifications-list li {
+        padding: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s ease;
+        background-color: #3a3748; /* changed background for better contrast */
+        color: #eee; /* lighter text */
+      }
+      .notifications-list li:hover {
+        background-color: rgba(255, 184, 0, 0.3);
+        color: #222; /* darker text on hover */
+      }
+      .notifications-list li:last-child {
+        border-bottom: none;
+      }
+      .notification-content {
+        flex: 1;
+        color: inherit; /* inherit color from li */
+      }
+      .notification-content i {
+        margin-right: 10px;
+        color: #ffb800;
+      }
+      .notification-actions {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-mark-read, .btn-delete {
+        background: #ffb800;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 700;
+        color: #2a2738;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+      }
+      .btn-mark-read:hover, .btn-delete:hover {
+        transform: translateY(-2px);
+        background-color: #e6a700;
+      }
+      .modal-content {
+        background: #2a2738;
+        padding: 20px;
+        border-radius: 12px;
+        width: 400px;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      }
+      .modal-content h3 {
+        margin-bottom: 15px;
+        color: #ff5c5c;
+      }
+      .modal-content input,
+      .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: none;
+        background: #3a3748;
+        color: #fff;
+      }
+      .modal-content button {
+        background: #ffb800;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        color: #2a2738;
+      }
+      .close-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+    </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html" class="active"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Notifications</h1>
+      <div class="header-right">
+        <div class="search-bar" style="position: relative; display: flex; align-items: center;">
+          <i class="fas fa-search" style="position: absolute; left: 10px; color: #999;"></i>
+          <input id="globalSearch" placeholder="Search notifications..." style="padding-left: 35px; padding-right: 35px;" />
+          <i id="clearSearch" class="fas fa-times" style="position: absolute; right: 10px; cursor: pointer; display: none; color: #999;"></i>
+        </div>
+        <div class="header-icons">
+          <div class="notif" id="notifBell" title="Notifications (click)">
+            <i class="fas fa-bell"></i>
+            <span id="notifBadge" class="badge">7</span>
+          </div>
+          <button id="logoutBtn" class="logout" onclick="window.location.href='../login.html'">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="notifications-section">
+      <h3>Recent Notifications</h3>
+      <ul class="notifications-list">
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-bullhorn"></i> New course added: Physics
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-calendar-alt"></i> Assignment deadline extended
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-calendar-times"></i> Holiday on 2nd October
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-user-plus"></i> New student enrolled: John Doe
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-video"></i> Live class scheduled for tomorrow
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-file-alt"></i> New material uploaded: Math Notes
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li>
+          <div class="notification-content">
+            <i class="fas fa-trophy"></i> Student achieved top score in quiz
+          </div>
+          <div class="notification-actions">
+            <button class="btn-mark-read">Mark as Read</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+      </ul>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="openModal('addNotificationModal')" class="btn-submit">+ Add Notification</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div id="addNotificationModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('addNotificationModal')">&times;</span>
+      <h3>Add Notification</h3>
+      <input type="text" placeholder="Notification Title" id="notifTitle" />
+      <textarea placeholder="Notification Message" id="notifMessage"></textarea>
+      <button onclick="addNotification()">Send</button>
+    </div>
+  </div>
+
+    <script>
+      function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+      }
+      function updateBadge(increment) {
+        const badge = document.getElementById('notifBadge');
+        let count = parseInt(badge.textContent) || 0;
+        count += increment;
+        if (count < 0) count = 0;
+        badge.textContent = count;
+      }
+      function addNotification() {
+        const title = document.getElementById('notifTitle').value.trim();
+        const message = document.getElementById('notifMessage').value.trim();
+        if (title && message) {
+          // Create new notification item
+          const list = document.querySelector('.notifications-list');
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <div class="notification-content">
+              <i class="fas fa-bullhorn"></i> ${title}: ${message}
+            </div>
+            <div class="notification-actions">
+              <button class="btn-mark-read">Mark as Read</button>
+              <button class="btn-delete">Delete</button>
+            </div>
+          `;
+          // Add event listeners to buttons
+          li.querySelector('.btn-delete').addEventListener('click', function() {
+            li.remove();
+            updateBadge(-1); // Assuming deleted unread
+          });
+          li.querySelector('.btn-mark-read').addEventListener('click', function() {
+            li.style.opacity = '0.5';
+            this.disabled = true;
+            this.textContent = 'Read';
+            updateBadge(-1);
+          });
+          list.appendChild(li);
+          updateBadge(1); // New unread
+          alert('Notification added successfully!');
+          closeModal('addNotificationModal');
+          document.getElementById('notifTitle').value = '';
+          document.getElementById('notifMessage').value = '';
+        } else {
+          alert('Please fill all fields.');
+        }
+      }
+      // Attach events to existing buttons
+      document.addEventListener('DOMContentLoaded', function() {
+        const items = document.querySelectorAll('.notifications-list li');
+        items.forEach(li => {
+          const deleteBtn = li.querySelector('.btn-delete');
+          const readBtn = li.querySelector('.btn-mark-read');
+          deleteBtn.addEventListener('click', function() {
+            li.remove();
+            updateBadge(-1);
+          });
+          readBtn.addEventListener('click', function() {
+            li.style.opacity = '0.5';
+            this.disabled = true;
+            this.textContent = 'Read';
+            updateBadge(-1);
+          });
+        });
+      });
+      // Search functionality
+      const globalSearch = document.getElementById('globalSearch');
+      const clearSearch = document.getElementById('clearSearch');
+      globalSearch.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        clearSearch.style.display = query ? 'block' : 'none';
+        const items = document.querySelectorAll('.notifications-list li');
+        let anyVisible = false;
+        items.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          const isVisible = text.includes(query);
+          item.style.display = isVisible ? '' : 'none';
+          if (isVisible) anyVisible = true;
+        });
+        // Show "No data found" message if no items visible
+        let noDataElem = document.getElementById('noDataMessage');
+        if (!noDataElem) {
+          noDataElem = document.createElement('div');
+          noDataElem.id = 'noDataMessage';
+          noDataElem.style.color = '#ffb800';
+          noDataElem.style.textAlign = 'center';
+          noDataElem.style.marginTop = '20px';
+          noDataElem.textContent = 'No notifications found.';
+          document.querySelector('.notifications-section').appendChild(noDataElem);
+        }
+        noDataElem.style.display = anyVisible ? 'none' : 'block';
+      });
+      clearSearch.addEventListener('click', function() {
+        globalSearch.value = '';
+        clearSearch.style.display = 'none';
+        const items = document.querySelectorAll('.notifications-list li');
+        items.forEach(item => {
+          item.style.display = '';
+        });
+        const noDataElem = document.getElementById('noDataMessage');
+        if (noDataElem) noDataElem.style.display = 'none';
+        globalSearch.focus();
+      });
+      // Notification bell click
+      document.getElementById('notifBell').addEventListener('click', function() {
+        const badge = document.getElementById('notifBadge');
+        const count = parseInt(badge.textContent) || 0;
+        alert(`You have ${count} unread notifications.`);
+      });
+    </script>
+</body>
+</html>

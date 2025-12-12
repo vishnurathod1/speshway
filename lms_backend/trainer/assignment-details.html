@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Assignment Details - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Assignment Details</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 id="assignmentTitle">Loading...</h2>
+      <p id="assignmentDescription">Loading assignment details...</p>
+      <button id="backBtn" class="btn-primary">Back to My Assignments</button>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Get assignment title from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const assignmentTitle = urlParams.get('title');
+    if (assignmentTitle) {
+      document.getElementById('assignmentTitle').textContent = assignmentTitle;
+
+      // Provide detailed info based on assignment title
+      const assignmentDetailsMap = {
+        'Algebra Basics': 'This assignment covers fundamental algebraic concepts. Students are required to solve equations and demonstrate understanding of variables and functions.',
+        'Geometry Problems': 'This assignment focuses on geometry problems including shapes, angles, and theorems. Students must provide step-by-step solutions.',
+        'Calculus Homework': 'This homework assignment covers limits, derivatives, and integrals. Students need to show all work and provide correct answers.'
+      };
+
+      const description = assignmentDetailsMap[assignmentTitle] || 'Detailed information about this assignment is not available.';
+      document.getElementById('assignmentDescription').textContent = description;
+    } else {
+      document.getElementById('assignmentTitle').textContent = 'Assignment Title Not Found';
+      document.getElementById('assignmentDescription').textContent = '';
+    }
+
+    // Back button functionality
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'my-assignments.html';
+    });
+  </script>
+</body>
+</html>

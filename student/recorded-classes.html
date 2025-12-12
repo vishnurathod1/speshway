@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recorded Classes - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html" class="active"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Recorded Classes</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Available Recorded Classes</h2>
+      <div class="form-group" style="max-width: 300px; margin-bottom: 20px;">
+        <label for="courseFilter" style="font-weight: 600; display: block; margin-bottom: 5px;">Filter by Course:</label>
+        <select id="courseFilter" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+          <option value="all">All Courses</option>
+          <option value="mathematics">Mathematics</option>
+          <option value="science">Science</option>
+        </select>
+      </div>
+      <div class="table-container">
+        <table id="recordedClassesTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Course</th>
+              <th>Trainer</th>
+              <th>Duration</th>
+              <th>Uploaded</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Introduction to Algebra</td>
+              <td>Mathematics</td>
+              <td>John Smith</td>
+              <td>45 min</td>
+              <td>2024-09-15</td>
+              <td><button onclick="watchRecordedClass('Introduction to Algebra')">Watch</button></td>
+            </tr>
+            <tr>
+              <td>Basic Geometry</td>
+              <td>Mathematics</td>
+              <td>John Smith</td>
+              <td>50 min</td>
+              <td>2024-09-20</td>
+              <td><button onclick="watchRecordedClass('Basic Geometry')">Watch</button></td>
+            </tr>
+            <tr>
+              <td>Chemistry Fundamentals</td>
+              <td>Science</td>
+              <td>Jane Doe</td>
+              <td>40 min</td>
+              <td>2024-09-25</td>
+              <td><button onclick="watchRecordedClass('Chemistry Fundamentals')">Watch</button></td>
+            </tr>
+            <tr>
+              <td>Biology Basics</td>
+              <td>Science</td>
+              <td>Jane Doe</td>
+              <td>55 min</td>
+              <td>2024-10-01</td>
+              <td><button onclick="watchRecordedClass('Biology Basics')">Watch</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mapping of recorded class titles to video URLs (matching admin recorded classes)
+    const recordedClassVideos = {
+      "Introduction to Algebra": "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+      "Basic Geometry": "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
+      "Chemistry Fundamentals": "https://www.youtube.com/watch?v=mU6anWqZJcc",
+      "Biology Basics": "https://www.youtube.com/watch?v=Ke90Tje7VS0"
+    };
+
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = '../student/student-login.html';
+    });
+
+    function watchRecordedClass(title) {
+      const videoUrl = recordedClassVideos[title];
+      if (videoUrl) {
+        window.open(videoUrl, '_blank');
+      } else {
+        alert('Video not found for: ' + title);
+      }
+    }
+
+    // Filter recorded classes by course
+    document.getElementById('courseFilter').addEventListener('change', (e) => {
+      const selectedCourse = e.target.value;
+      const rows = document.querySelectorAll('#recordedClassesTable tbody tr');
+
+      rows.forEach(row => {
+        const courseCell = row.cells[1].textContent.toLowerCase();
+        if (selectedCourse === 'all' || courseCell.includes(selectedCourse)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

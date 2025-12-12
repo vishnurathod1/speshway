@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Registration - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="auth-logo">
+        <h2>Student Registration</h2>
+        <p>Create your account. Your registration will be reviewed by an administrator.</p>
+      </div>
+      <form id="registerForm" class="auth-form">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="Enter your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required />
+        </div>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Choose a username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Create a password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
+        </div>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" min="1" placeholder="Enter your age" required />
+        </div>
+        <div class="form-group">
+          <label for="qualification">Qualification</label>
+          <input type="text" id="qualification" placeholder="Enter your qualification" required />
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" placeholder="Enter your location" required />
+        </div>
+        <div class="form-group">
+          <label for="course">Preferred Course</label>
+          <select id="course" required>
+            <option value="">Select a course</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="Computer Science">Computer Science</option>
+          </select>
+        </div>
+        <button type="submit" class="auth-btn">Register</button>
+      </form>
+      <div class="auth-links">
+        <a href="student-login.html">Already have an account? Login</a>
+      </div>
+      <div class="auth-footer">
+        <p>&copy; 2024 Happy Learning LMS. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+  <script src="/assets/js/student-register.js"></script>
+</body>
+</html>

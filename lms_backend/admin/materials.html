@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materials - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+<div class="main-content">
+  <header>
+    <h1>📘 Study Materials</h1>
+  </header>
+
+  <section class="section">
+    <div class="table-container">
+      <h3>Available Materials</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Material Title</th>
+            <th>Course</th>
+            <th>Format</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody id="materialsTableBody">
+          <tr>
+            <td>Math Formulas</td>
+            <td>Math Basics</td>
+            <td>PDF</td>
+            <td><a href="/assets/files/math-formulas.pdf" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Science Notes</td>
+            <td>Science 101</td>
+            <td>DOCX</td>
+            <td><a href="/assets/files/science-notes.docx" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>History Timeline</td>
+            <td>History Basics</td>
+            <td>PPT</td>
+            <td><a href="/assets/files/history-timeline.ppt" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Physics Equations</td>
+            <td>Physics Advanced</td>
+            <td>PDF</td>
+            <td><a href="/assets/files/physics-equations.pdf" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Chemistry Handbook</td>
+            <td>Chemistry Intro</td>
+            <td>DOCX</td>
+            <td><a href="/assets/files/chemistry-handbook.docx" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Biology Diagrams</td>
+            <td>Biology Fundamentals</td>
+            <td>PPT</td>
+            <td><a href="/assets/files/biology-diagrams.ppt" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>CS Tutorials</td>
+            <td>Computer Science</td>
+            <td>PDF</td>
+            <td><a href="/assets/files/cs-tutorials.pdf" download>Download</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  function deleteRow(button) {
+    const row = button.parentElement.parentElement;
+    row.remove();
+  }
+</script>
+
+</body>
+</html>

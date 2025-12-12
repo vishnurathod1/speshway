@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live Classes - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html" class="active"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Live Classes</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Upcoming Live Classes</h2>
+      <div class="table-container">
+        <table id="liveClassesTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Course</th>
+              <th>Trainer</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Advanced Calculus</td>
+              <td>Mathematics</td>
+              <td>John Smith</td>
+              <td>2024-10-12</td>
+              <td>10:00 AM</td>
+              <td><button onclick="joinLiveClass('Advanced Calculus')">Join</button></td>
+            </tr>
+            <tr>
+              <td>Trigonometry Basics</td>
+              <td>Mathematics</td>
+              <td>John Smith</td>
+              <td>2024-10-14</td>
+              <td>2:00 PM</td>
+              <td><button onclick="joinLiveClass('Trigonometry Basics')">Join</button></td>
+            </tr>
+            <tr>
+              <td>Physics Fundamentals</td>
+              <td>Science</td>
+              <td>Jane Doe</td>
+              <td>2024-10-16</td>
+              <td>11:00 AM</td>
+              <td><button onclick="joinLiveClass('Physics Fundamentals')">Join</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = '../student/student-login.html';
+    });
+
+    function joinLiveClass(title) {
+      // Open Zoom meeting link
+      window.open('https://zoom.us/j/123456789', '_blank'); // Replace with actual meeting ID
+    }
+  </script>
+</body>
+</html>

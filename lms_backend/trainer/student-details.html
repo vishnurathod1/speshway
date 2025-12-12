@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Details - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Student Details</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 id="studentName">Loading...</h2>
+      <p id="studentInfo">Loading student information...</p>
+      <button id="sendMessageBtn" class="btn-primary" style="margin-right: 10px;">Send Message</button>
+      <button id="backBtn" class="btn-primary">Back to Dashboard</button>
+    </section>
+  </main>
+
+  <!-- Message Modal -->
+  <div class="modal" id="messageModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeMessageModal()">&times;</span>
+      <h3>Send Message to <span id="messageStudentName"></span></h3>
+      <textarea id="messageText" placeholder="Type your message here..." rows="5"></textarea>
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Get student name from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentName = urlParams.get('name');
+    if (studentName) {
+      document.getElementById('studentName').textContent = studentName;
+
+      // Provide detailed info based on student name
+      const studentDetailsMap = {
+        'John Doe': 'Email: john@example.com<br>Course: Algebra Basics<br>Status: Active<br>Enrolled: September 2024<br>Progress: 75%',
+        'Jane Smith': 'Email: jane@example.com<br>Course: Geometry Fundamentals<br>Status: Active<br>Enrolled: September 2024<br>Progress: 80%',
+        'Bob Johnson': 'Email: bob@example.com<br>Course: Calculus I<br>Status: Inactive<br>Enrolled: August 2024<br>Progress: 60%'
+      };
+
+      const info = studentDetailsMap[studentName] || 'Detailed information about this student is not available.';
+      document.getElementById('studentInfo').innerHTML = info;
+    } else {
+      document.getElementById('studentName').textContent = 'Student Name Not Found';
+      document.getElementById('studentInfo').textContent = '';
+    }
+
+    // Send message button
+    document.getElementById('sendMessageBtn').addEventListener('click', () => {
+      document.getElementById('messageStudentName').textContent = studentName;
+      document.getElementById('messageModal').style.display = 'flex';
+    });
+
+    // Close message modal
+    function closeMessageModal() {
+      document.getElementById('messageModal').style.display = 'none';
+      document.getElementById('messageText').value = '';
+    }
+
+    // Send message
+    function sendMessage() {
+      const message = document.getElementById('messageText').value.trim();
+      if (!message) {
+        alert('Please enter a message.');
+        return;
+      }
+      // Simulate sending message
+      const messages = JSON.parse(localStorage.getItem('trainerMessages')) || [];
+      messages.push({
+        to: studentName,
+        message: message,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('trainerMessages', JSON.stringify(messages));
+      alert('Message sent successfully!');
+      closeMessageModal();
+    }
+
+    // Back button functionality
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Assignments</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Style for search input container to position relative */
+    .profile {
+      position: relative;
+    }
+    /* Style for search input to add padding-right for clear button */
+    #assignmentSearch {
+      padding-right: 30px;
+    }
+    /* Style for clear button inside search input */
+    .clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #888;
+      cursor: pointer;
+      user-select: none;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html" class="active"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Assignments</h1>
+      <div class="profile">
+        <input type="text" id="assignmentSearch" placeholder="Search Assignments..." />
+        <span class="clear-btn">×</span>
+        <button onclick="openAddModal('assignment')">+ Assignment</button>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <h3>All Assignments</h3>
+      <table id="assignmentTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Course</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic rows will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modalAssignment" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalAssignment')">&times;</span>
+      <h3>Add Assignment</h3>
+      <input type="text" id="m_assignmentTitle" placeholder="Assignment Title" />
+      <input type="text" id="m_assignmentCourse" placeholder="Course Name" />
+      <input type="date" id="m_assignmentDue" />
+      <select id="m_assignmentStatus">
+        <option value="Pending">Pending</option>
+        <option value="Submitted">Submitted</option>
+        <option value="Overdue">Overdue</option>
+      </select>
+      <button id="modalAssignmentSave">Save</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let assignments = [];
+
+      function loadAssignments() {
+        fetch('/accounts/api/assignments/')
+          .then(response => response.json())
+          .then(data => {
+            assignments = data.map(item => ({
+              id: item.id,
+              title: item.title,
+              course: item.course__title,
+              due: item.due_date,
+              status: item.status
+            }));
+            populateTable('assignmentTable', assignments);
+          })
+          .catch(error => {
+            console.error('Error loading assignments:', error);
+            populateTable('assignmentTable', []);
+          });
+      }
+
+      function populateTable(id, data) {
+        const tbody = document.querySelector(`#${id} tbody`);
+        tbody.innerHTML = '';
+        if (data.length === 0) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 5;
+          td.style.textAlign = 'center';
+          td.style.color = 'rgba(199, 24, 24, 0.6)';
+          td.textContent = 'No data found';
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+          return;
+        }
+        data.forEach((item, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.title}</td>
+            <td>${item.course}</td>
+            <td>${item.due}</td>
+            <td>${item.status}</td>
+            <td>
+              <button class="edit-btn" data-index="${index}">Edit</button>
+              <button class="delete-btn" data-index="${index}">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Attach event listeners for edit and delete buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = e.target.getAttribute('data-index');
+            openEditModal(idx);
+          });
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = e.target.getAttribute('data-index');
+            if (confirm('Are you sure you want to delete this assignment?')) {
+              assignments.splice(idx, 1);
+              populateTable('assignmentTable', assignments);
+            }
+          });
+        });
+      }
+
+      loadAssignments();
+
+      // Simple search functionality with clear button
+      const searchInput = document.getElementById('assignmentSearch');
+      const clearBtn = document.querySelector('.clear-btn');
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.style.display = 'none';
+        populateTable('assignmentTable', assignments);
+        searchInput.focus();
+      });
+
+      searchInput.addEventListener('input', () => {
+        const term = searchInput.value.toLowerCase();
+        clearBtn.style.display = term ? 'block' : 'none';
+        const filtered = assignments.filter(a =>
+          a.title.toLowerCase().includes(term) ||
+          a.course.toLowerCase().includes(term) ||
+          a.due.toLowerCase().includes(term) ||
+          a.status.toLowerCase().includes(term)
+        );
+        populateTable('assignmentTable', filtered);
+      });
+
+      // Modal handling
+      const modal = document.getElementById('modalAssignment');
+      const modalTitle = modal.querySelector('h3');
+      const inputTitle = document.getElementById('m_assignmentTitle');
+      const inputCourse = document.getElementById('m_assignmentCourse');
+      const inputDue = document.getElementById('m_assignmentDue');
+      const inputStatus = document.getElementById('m_assignmentStatus');
+      const saveBtn = document.getElementById('modalAssignmentSave');
+
+      let editIndex = null;
+
+      window.openAddModal = function() {
+        editIndex = null;
+        modalTitle.textContent = 'Add Assignment';
+        inputTitle.value = '';
+        inputCourse.value = '';
+        inputDue.value = '';
+        inputStatus.value = 'Pending';
+        modal.style.display = 'flex';
+      };
+
+      window.openEditModal = function(index) {
+        editIndex = index;
+        modalTitle.textContent = 'Edit Assignment';
+        const assignment = assignments[index];
+        inputTitle.value = assignment.title;
+        inputCourse.value = assignment.course;
+        inputDue.value = assignment.due;
+        inputStatus.value = assignment.status;
+        modal.style.display = 'flex';
+      };
+
+      window.closeModal = function() {
+        modal.style.display = 'none';
+      };
+
+      saveBtn.addEventListener('click', () => {
+        const title = inputTitle.value.trim();
+        const course = inputCourse.value.trim();
+        const due = inputDue.value;
+        const status = inputStatus.value;
+
+        if (!title || !course || !due) {
+          alert('Please fill in all fields.');
+          return;
+        }
+
+        if (editIndex !== null) {
+          // For now, just update locally (edit functionality can be added later)
+          assignments[editIndex] = { title, course, due, status };
+          populateTable('assignmentTable', assignments);
+          closeModal();
+        } else {
+          // Create new assignment via API
+          fetch('/accounts/api/assignments/create/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            },
+            body: JSON.stringify({ title, course, due_date: due, status })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              loadAssignments(); // Reload assignments
+              closeModal();
+            } else {
+              alert('Error: ' + data.error);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to create assignment');
+          });
+        }
+      });
+
+      // Close modal when clicking outside content
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

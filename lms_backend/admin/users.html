@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script defer src="/assets/js/dashboard.js"></script>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+      <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance (View Only)</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Manage Users</h1>
+      <div class="profile">
+        <input type="text" id="searchInput" placeholder="Search Users...">
+        <button id="addStudentBtn">+ Student</button>
+        <button id="addTrainerBtn">+ Trainer</button>
+      </div>
+    </header>
+
+    <!-- Students -->
+    <div class="table-container">
+      <h3>Students</h3>
+      <input type="text" id="studentSearchInput" placeholder="Search Students..." onkeyup="filterTable('studentsTable', this.value)">
+      <table id="studentsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Qualification</th>
+            <th>Location</th>
+            <th>Course</th>
+            <th>Date of Joining</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentsTableBody">
+          <tr>
+            <td>John Doe</td>
+            <td>25</td>
+            <td>Bachelor's in Math</td>
+            <td>New York</td>
+            <td>Math Basics</td>
+            <td>2023-08-15</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('student', 'John Doe')">Interact</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>22</td>
+            <td>High School Diploma</td>
+            <td>California</td>
+            <td>Biology Fundamentals</td>
+            <td>2023-09-01</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('student', 'Jane Smith')">Interact</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Mark Lee</td>
+            <td>28</td>
+            <td>Master's in Physics</td>
+            <td>Texas</td>
+            <td>Physics Advanced</td>
+            <td>2023-10-05</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('student', 'Mark Lee')">Interact</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Emily Davis</td>
+            <td>24</td>
+            <td>Bachelor's in Chemistry</td>
+            <td>Florida</td>
+            <td>Chemistry Intro</td>
+            <td>2023-11-10</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('student', 'Emily Davis')">Interact</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Alice Johnson</td>
+            <td>26</td>
+            <td>Master's in CS</td>
+            <td>Washington</td>
+            <td>Computer Science</td>
+            <td>2023-12-01</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('student', 'Alice Johnson')">Interact</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Trainers -->
+    <div class="table-container">
+      <h3>Trainers</h3>
+      <input type="text" id="trainerSearchInput" placeholder="Search Trainers..." onkeyup="filterTable('trainersTable', this.value)">
+      <button id="scheduleAllTrainersBtn">Schedule Meeting for All Trainers</button>
+      <table id="trainersTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Qualification</th>
+            <th>Location</th>
+            <th>Course / Expertise</th>
+            <th>Date of Joining</th>
+            <th>Previous Experience</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="trainersTableBody">
+          <tr>
+            <td>Mr. Alex</td>
+            <td>35</td>
+            <td>PhD in Physics</td>
+            <td>Boston</td>
+            <td>Physics</td>
+            <td>2020-01-15</td>
+            <td>10 years teaching</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('trainer', 'Mr. Alex')">Interact</button>
+              <button class="schedule-btn" onclick="openScheduleModal('trainer', 'Mr. Alex')">Schedule Meeting</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Ms. Emma</td>
+            <td>32</td>
+            <td>Master's in Chemistry</td>
+            <td>Chicago</td>
+            <td>Chemistry</td>
+            <td>2021-03-20</td>
+            <td>8 years lab work</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('trainer', 'Ms. Emma')">Interact</button>
+              <button class="schedule-btn" onclick="openScheduleModal('trainer', 'Ms. Emma')">Schedule Meeting</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Dr. Smith</td>
+            <td>40</td>
+            <td>PhD in Mathematics</td>
+            <td>Seattle</td>
+            <td>Mathematics</td>
+            <td>2019-05-10</td>
+            <td>15 years research</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('trainer', 'Dr. Smith')">Interact</button>
+              <button class="schedule-btn" onclick="openScheduleModal('trainer', 'Dr. Smith')">Schedule Meeting</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Prof. Johnson</td>
+            <td>38</td>
+            <td>PhD in Biology</td>
+            <td>Austin</td>
+            <td>Biology</td>
+            <td>2020-07-25</td>
+            <td>12 years teaching</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('trainer', 'Prof. Johnson')">Interact</button>
+              <button class="schedule-btn" onclick="openScheduleModal('trainer', 'Prof. Johnson')">Schedule Meeting</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Mr. Lee</td>
+            <td>30</td>
+            <td>Master's in CS</td>
+            <td>San Francisco</td>
+            <td>Computer Science</td>
+            <td>2022-09-30</td>
+            <td>7 years development</td>
+            <td>
+              <button class="interact-btn" onclick="openInteractModal('trainer', 'Mr. Lee')">Interact</button>
+              <button class="schedule-btn" onclick="openScheduleModal('trainer', 'Mr. Lee')">Schedule Meeting</button>
+              <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- MODALS -->
+  <div id="addStudentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('addStudentModal')">&times;</span>
+      <h3>Add Student</h3>
+      <input type="text" id="studentName" placeholder="Name">
+      <input type="number" id="studentAge" placeholder="Age">
+      <input type="text" id="studentQualification" placeholder="Qualification">
+      <input type="text" id="studentLocation" placeholder="Location">
+      <input type="text" id="studentCourse" placeholder="Course">
+      <input type="date" id="studentDateOfJoining" placeholder="Date of Joining">
+      <input type="text" id="studentPreviousExperience" placeholder="Previous Experience">
+      <button onclick="addStudent()">Save</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'block';
+      }
+    }
+
+    function addStudent() {
+      const name = document.getElementById('studentName').value.trim();
+      const age = document.getElementById('studentAge').value.trim();
+      const qualification = document.getElementById('studentQualification').value.trim();
+      const location = document.getElementById('studentLocation').value.trim();
+      const course = document.getElementById('studentCourse').value.trim();
+      const dateOfJoining = document.getElementById('studentDateOfJoining').value;
+      const previousExperience = document.getElementById('studentPreviousExperience').value.trim();
+      const status = document.getElementById('studentStatus').value;
+
+      if (!name) {
+        alert('Please enter the student name.');
+        return;
+      }
+
+      // Add new student row to the table
+      const tableBody = document.getElementById('studentsTableBody');
+      const newRow = document.createElement('tr');
+
+      newRow.innerHTML = `
+        <td>${name}</td>
+        <td>${age || 'Not Provided'}</td>
+        <td>${qualification || 'Not Provided'}</td>
+        <td>${location || 'Not Provided'}</td>
+        <td>${course || 'Not Provided'}</td>
+        <td>${dateOfJoining || 'Not Provided'}</td>
+        <td>
+          <button class="interact-btn" onclick="openInteractModal('student', '${name}')">Interact</button>
+          <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
+      `;
+
+      tableBody.appendChild(newRow);
+      closeModal('addStudentModal');
+    }
+
+    function addTrainer() {
+      const name = document.getElementById('trainerName').value.trim();
+      const age = document.getElementById('trainerAge').value.trim();
+      const qualification = document.getElementById('trainerQualification').value.trim();
+      const location = document.getElementById('trainerLocation').value.trim();
+      const courseExpertise = document.getElementById('trainerCourseExpertise').value.trim();
+      const dateOfJoining = document.getElementById('trainerDateOfJoining').value;
+      const previousExperience = document.getElementById('trainerPreviousExperience').value.trim();
+
+      if (!name) {
+        alert('Please enter the trainer name.');
+        return;
+      }
+
+      // Add new trainer row to the table
+      const tableBody = document.getElementById('trainersTableBody');
+      const newRow = document.createElement('tr');
+
+      newRow.innerHTML = `
+        <td>${name}</td>
+        <td>${age || 'Not Provided'}</td>
+        <td>${qualification || 'Not Provided'}</td>
+        <td>${location || 'Not Provided'}</td>
+        <td>${courseExpertise || 'Not Provided'}</td>
+        <td>${dateOfJoining || 'Not Provided'}</td>
+        <td>${previousExperience || 'Not Provided'}</td>
+        <td>
+          <button class="interact-btn" onclick="openInteractModal('trainer', '${name}')">Interact</button>
+          <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+        </td>
+      `;
+
+      tableBody.appendChild(newRow);
+      closeModal('addTrainerModal');
+    }
+
+    document.getElementById('addStudentBtn').addEventListener('click', function() {
+      openModal('addStudentModal');
+    });
+
+    document.getElementById('addTrainerBtn').addEventListener('click', function() {
+      openModal('addTrainerModal');
+    });
+  </script>
+
+  <div id="addTrainerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('addTrainerModal')">&times;</span>
+      <h3>Add Trainer</h3>
+      <input type="text" id="trainerName" placeholder="Name">
+      <input type="number" id="trainerAge" placeholder="Age">
+      <input type="text" id="trainerQualification" placeholder="Qualification">
+      <input type="text" id="trainerLocation" placeholder="Location">
+      <input type="text" id="trainerCourseExpertise" placeholder="Course / Expertise">
+      <input type="date" id="trainerDateOfJoining" placeholder="Date of Joining">
+      <input type="text" id="trainerPreviousExperience" placeholder="Previous Experience">
+      <button onclick="addTrainer()">Save</button>
+    </div>
+  </div>
+
+  <!-- Interact Modal -->
+  <div id="interactModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('interactModal')">&times;</span>
+      <h3 id="interactModalTitle">Interact with User</h3>
+      <p id="interactUserInfo"></p>
+      <textarea id="messageTextarea" placeholder="Write your message here..." rows="5" style="width: 100%; margin: 10px 0;"></textarea>
+      <button onclick="sendMessage()">Send Message</button>
+    </div>
+  </div>
+
+  <!-- Schedule Meeting Modal -->
+  <div id="scheduleModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('scheduleModal')">&times;</span>
+      <h3 id="scheduleModalTitle">Schedule Meeting</h3>
+      <p id="scheduleUserInfo"></p>
+      <label for="meetingDate">Date:</label>
+      <input type="date" id="meetingDate" style="width: 100%; margin-bottom: 10px;">
+      <label for="meetingTime">Time:</label>
+      <input type="time" id="meetingTime" style="width: 100%; margin-bottom: 10px;">
+      <label for="meetingTopic">Topic:</label>
+      <input type="text" id="meetingTopic" placeholder="Meeting Topic" style="width: 100%; margin-bottom: 10px;">
+      <label for="meetingLink">Meeting Link:</label>
+      <input type="url" id="meetingLink" placeholder="https://meet.google.com/..." style="width: 100%; margin-bottom: 10px;">
+      <label for="meetingMessage">Message:</label>
+      <textarea id="meetingMessage" placeholder="Additional message..." rows="4" style="width: 100%; margin-bottom: 10px;"></textarea>
+      <button onclick="sendMeeting()">Schedule</button>
+    </div>
+  </div>
+
+  <script>
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+    }
+
+    // Event listener for scheduling meeting for all trainers
+    document.getElementById('scheduleAllTrainersBtn').addEventListener('click', function() {
+      // Open the schedule modal with a special flag for all trainers
+      openScheduleModal('trainer', 'All Trainers');
+    });
+
+    function openInteractModal(userType, userName) {
+      // Set modal title and user info
+      document.getElementById('interactModalTitle').textContent = `Interact with ${userType.charAt(0).toUpperCase() + userType.slice(1)}: ${userName}`;
+      document.getElementById('interactUserInfo').textContent = `Send a message to ${userName}`;
+      document.getElementById('messageTextarea').value = '';
+
+      // Store user info in modal dataset for sending message
+      const modal = document.getElementById('interactModal');
+      modal.dataset.userType = userType;
+      modal.dataset.userName = userName;
+
+      // Show the modal
+      modal.style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'none';
+    }
+
+    function sendMessage() {
+      const modal = document.getElementById('interactModal');
+      const userType = modal.dataset.userType;
+      const userName = modal.dataset.userName;
+      const message = document.getElementById('messageTextarea').value.trim();
+
+      if (!message) {
+        alert('Please enter a message before sending.');
+        return;
+      }
+
+      // For now, just alert the message. Replace this with actual sending logic.
+      alert(`Message sent to ${userType} ${userName}:\n\n${message}`);
+
+      // Close the modal after sending
+      closeModal('interactModal');
+    }
+
+    function openScheduleModal(userType, userName) {
+      document.getElementById('scheduleModalTitle').textContent = `Schedule Meeting with ${userType.charAt(0).toUpperCase() + userType.slice(1)}: ${userName}`;
+      document.getElementById('scheduleUserInfo').textContent = `Set meeting details for ${userName}`;
+      document.getElementById('meetingDate').value = '';
+      document.getElementById('meetingTime').value = '';
+      document.getElementById('meetingTopic').value = '';
+      document.getElementById('meetingLink').value = '';
+      document.getElementById('meetingMessage').value = '';
+
+      const modal = document.getElementById('scheduleModal');
+      modal.dataset.userType = userType;
+      modal.dataset.userName = userName;
+
+      modal.style.display = 'block';
+    }
+
+    function sendMeeting() {
+      const modal = document.getElementById('scheduleModal');
+      const userType = modal.dataset.userType;
+      const userName = modal.dataset.userName;
+      const date = document.getElementById('meetingDate').value;
+      const time = document.getElementById('meetingTime').value;
+      const topic = document.getElementById('meetingTopic').value.trim();
+      const link = document.getElementById('meetingLink').value.trim();
+      const message = document.getElementById('meetingMessage').value.trim();
+
+      if (!date) {
+        alert('Please select a meeting date.');
+        return;
+      }
+      if (!time) {
+        alert('Please select a meeting time.');
+        return;
+      }
+      if (!topic) {
+        alert('Please enter a meeting topic.');
+        return;
+      }
+
+      // Compose meeting details message
+      let fullMessage = `Meeting scheduled with ${userName} on ${date} at ${time}.\nTopic: ${topic}`;
+      if (link) {
+        fullMessage += `\nJoin Link: ${link}`;
+      }
+      if (message) {
+        fullMessage += `\nMessage: ${message}`;
+      }
+
+      // For now, just alert the meeting details. Replace with actual sending logic.
+      alert(fullMessage);
+
+      closeModal('scheduleModal');
+    }
+
+    function filterTable(tableId, filter) {
+      const table = document.getElementById(tableId);
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = tbody.getElementsByTagName('tr');
+      const filterValue = filter.toLowerCase();
+
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td');
+        let match = false;
+
+        for (let j = 0; j < cells.length - 1; j++) { // Exclude the Actions column
+          const cellText = cells[j].textContent.toLowerCase();
+          if (cellText.includes(filterValue)) {
+            match = true;
+            break;
+          }
+        }
+
+        rows[i].style.display = match ? '' : 'none';
+      }
+    }
+
+    // Close modal when clicking outside of modal content
+    window.onclick = function(event) {
+      const modal = document.getElementById('interactModal');
+      if (event.target === modal) {
+        closeModal('interactModal');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Learning - Student Dashboard</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <!-- HEADER -->
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Student Dashboard - Happy Learning LMS</h1>
+      <div class="header-right">
+        <div class="search-bar" style="position: relative; display: inline-block;">
+          <input id="globalSearch" placeholder="Search courses, assignments, materials..." style="padding-right: 35px;" />
+          <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none;"></i>
+        </div>
+      <div class="header-icons">
+        <div class="notif" id="notifBell" title="View Notifications">
+          <i class="fas fa-bell"></i>
+          <span id="notifBadge" class="badge">0</span>
+        </div>
+        <div class="profile-circle" onclick="openProfileModal()" title="View Profile"></div>
+        <div class="profile-info">
+          Welcome, Student<br/><small>Mathematics Department</small>
+        </div>
+        <button id="logoutBtn" class="logout" title="Logout">Logout</button>
+      </div>
+      </div>
+    </header>
+
+    <!-- WELCOME MESSAGE -->
+    <div class="welcome-section">
+      <h2>Welcome to Your Learning Dashboard</h2>
+      <p>Track your progress, access materials, and stay updated with your courses. Let's continue your educational journey!</p>
+    </div>
+
+    <!-- STATS -->
+    <section class="stats" id="stats">
+      <a href="my-courses.html" class="card-link">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-book"></i> My Courses</div>
+          <h3 id="courseCount">2</h3>
+        </div>
+      </a>
+      <a href="my-assignments.html" class="card-link">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-file-alt"></i> Assignments</div>
+          <h3 id="assignmentCount">3</h3>
+        </div>
+      </a>
+
+      <a href="materials.html" class="card-link">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-folder"></i> Materials</div>
+          <h3 id="materialCount">5</h3>
+        </div>
+      </a>
+      <a href="recorded-classes.html" class="card-link">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-video"></i> Recorded Classes</div>
+          <h3 id="videoCount">5</h3>
+        </div>
+      </a>
+      <a href="live-classes.html" class="card-link">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-video-camera"></i> Live Classes</div>
+          <h3 id="classCount">3</h3>
+        </div>
+      </a>
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="quick-actions">
+      <button onclick="openModal('assignment')" title="Submit your completed assignment"><i class="fas fa-upload"></i> Submit Assignment</button>
+      <button onclick="openModal('material')" title="Download course materials"><i class="fas fa-download"></i> Download Material</button>
+      <button onclick="openModal('liveclass')" title="Join an upcoming live class"><i class="fas fa-video-camera"></i> Join Live Class</button>
+      <button onclick="openModal('recordedclass')" title="Watch previously recorded classes"><i class="fas fa-play-circle"></i> Watch Recorded Class</button>
+      <button onclick="openModal('feedback')" title="Provide feedback on your learning experience"><i class="fas fa-comments"></i> Give Feedback</button>
+    </section>
+
+    <!-- TOP COURSES + ASSIGNMENTS (left), RECENT + HOLIDAYS (right) -->
+    <div class="section top-assign">
+      <div class="table-container" id="topCoursesContainer">
+        <h3>My Courses</h3>
+        <div id="topCourses"></div>
+      </div>
+      <div class="table-container">
+        <h3>Assignments</h3>
+      <!-- Removed individual export button for assignments -->
+      <div style="overflow:auto;">
+      <div style="position: relative; display: inline-block; width: 100%;">
+        <input id="assignmentSearch" placeholder="Search assignments..." class="mini-search" style="padding-right: 35px; width: 100%;" />
+        <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; font-size: 12px;"></i>
+      </div>
+        <table id="assignmentTable">
+          <thead><tr><th>Title</th><th>Course</th><th>Due</th><th>Status</th><th>Progress</th><th>Score</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+
+
+
+    <!-- Student Phase Recordings (Edureka-like format) -->
+    <div class="section">
+      <div class="table-container">
+        <h3>Student Phase Recordings</h3>
+        <div class="search-bar">
+          <input type="text" id="phaseSearchInput" placeholder="Search recordings...">
+        </div>
+        <div id="phaseRecordingsContainer" class="recordings-grid">
+          <!-- Recording cards will be loaded here by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Recorded & Live classes -->
+    <div class="section">
+      <div class="table-container">
+        <h3>Recorded Classes</h3>
+        <!-- Removed individual export button for recorded classes -->
+        <div style="position: relative; display: inline-block; width: 100%;">
+          <input id="recordedSearch" placeholder="Search recorded classes..." class="mini-search" style="padding-right: 35px; width: 100%;" />
+          <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; font-size: 12px;"></i>
+        </div>
+        <table id="recordedTable">
+          <thead><tr><th>Title</th><th>Course</th><th>Watch</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="table-container">
+        <h3>Live Classes</h3>
+      <!-- Removed individual export button for live classes -->
+      <div style="position: relative; display: inline-block; width: 100%;">
+        <input id="liveSearch" placeholder="Search live classes..." class="mini-search" style="padding-right: 35px; width: 100%;" />
+        <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; font-size: 12px;"></i>
+      </div>
+      <table id="liveTable">
+        <thead><tr><th>Title</th><th>Trainer</th><th>Date</th><th>Join</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS SECTION -->
+    <div class="section announcements">
+      <h3><i class="fas fa-bullhorn"></i> Latest Announcements</h3>
+      <div class="announcement-item">
+        <h4>Assignment Deadline Extended</h4>
+        <p>The deadline for Algebra Basics assignment has been extended to October 20th. Please submit your work on time.</p>
+        <small>Posted: October 10, 2024</small>
+      </div>
+      <div class="announcement-item">
+        <h4>New Course Material Available</h4>
+        <p>Additional study materials for Geometry have been uploaded. Check the Materials section for downloads.</p>
+        <small>Posted: October 8, 2024</small>
+      </div>
+    </div>
+
+    <!-- Recent activities & Holidays & Notifications -->
+    <div class="section">
+
+
+      <div class="calendar">
+        <h3><i class="fas fa-calendar-alt"></i> Upcoming Holidays</h3>
+        <ul id="holidaysList"></ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== MODALS (Add/Edit) ===== -->
+  <!-- Submit Assignment Modal -->
+  <div class="modal" id="modalAssignment">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('assignment')" title="Close">&times;</span>
+      <h3><i class="fas fa-upload"></i> Submit Assignment</h3>
+      <form class="form-row">
+        <label for="assignmentTitle">Assignment Title</label>
+        <input id="assignmentTitle" type="text" placeholder="Enter assignment title" required />
+      </form>
+      <form class="form-row">
+        <label for="assignmentFile">Upload File</label>
+        <input id="assignmentFile" type="file" accept=".pdf,.doc,.docx,.txt" required />
+      </form>
+      <form class="form-row">
+        <label for="assignmentNotes">Additional Notes (Optional)</label>
+        <textarea id="assignmentNotes" placeholder="Add any additional notes or comments..."></textarea>
+      </form>
+      <div class="form-actions">
+        <button onclick="submitAssignmentForm()" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Assignment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download Material Modal -->
+  <div class="modal" id="modalMaterial">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('material')" title="Close">&times;</span>
+      <h3><i class="fas fa-download"></i> Download Material</h3>
+      <form class="form-row">
+        <label for="materialTitle">Material Title</label>
+        <input id="materialTitle" type="text" placeholder="Enter material title" required />
+      </form>
+      <div class="form-actions">
+        <button onclick="downloadMaterial()" class="btn btn-primary"><i class="fas fa-download"></i> Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Join Live Class Modal -->
+  <div class="modal" id="modalLiveclass">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('liveclass')" title="Close">&times;</span>
+      <h3><i class="fas fa-video-camera"></i> Join Live Class</h3>
+      <form class="form-row">
+        <label for="liveClassTitle">Class Title</label>
+        <input id="liveClassTitle" type="text" placeholder="Enter class title" required />
+      </form>
+      <div class="form-actions">
+        <button onclick="joinLiveClassModal()" class="btn btn-primary"><i class="fas fa-play"></i> Join Class</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Watch Recorded Class Modal -->
+  <div class="modal" id="modalRecordedclass">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('recordedclass')" title="Close">&times;</span>
+      <h3><i class="fas fa-play-circle"></i> Watch Recorded Class</h3>
+      <form class="form-row">
+        <label for="recordedClassTitle">Class Title</label>
+        <input id="recordedClassTitle" type="text" placeholder="Enter class title" required />
+      </form>
+      <div class="form-actions">
+        <button onclick="watchRecordedClassModal()" class="btn btn-primary"><i class="fas fa-play"></i> Watch Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="modal" id="modalFeedback">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('feedback')" title="Close">&times;</span>
+      <h3><i class="fas fa-comments"></i> Provide Feedback</h3>
+      <form class="form-row">
+        <label for="feedbackText">Your Feedback</label>
+        <textarea id="feedbackText" placeholder="Share your thoughts, suggestions, or concerns..." required></textarea>
+      </form>
+      <div class="form-actions">
+        <button onclick="submitFeedbackForm()" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Modal -->
+  <div class="modal" id="modalNotifications">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('notifications')" title="Close">&times;</span>
+      <h3><i class="fas fa-bell"></i> Notifications</h3>
+      <div style="margin-bottom:10px">
+        <input id="m_notifText" placeholder="Add a new notification..." />
+        <button id="modalNotifSave" class="btn btn-secondary"><i class="fas fa-plus"></i> Add</button>
+      </div>
+      <ul id="notifList"></ul>
+    </div>
+  </div>
+
+  <!-- Video Modal for Phase Recordings -->
+  <div id="phaseVideoModal" class="modal">
+    <div class="modal-content">
+      <span id="closePhaseModal" class="close-btn">&times;</span>
+      <video id="phaseVideoPlayer" controls></video>
+    </div>
+  </div>
+
+  <script src="student-dashboard.js"></script>
+  <script src="/assets/js/auth.js"></script>
+
+</body>
+</html>

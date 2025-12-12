@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Attendance - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html" class="active"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Attendance</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Mark My Attendance</h2>
+      <form id="trainerAttendanceForm" class="form-container" style="max-width: 600px; margin-bottom: 20px; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: box-shadow 0.3s ease;">
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="trainerDateSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Date:</label>
+          <input type="date" id="trainerDateSelect" name="date" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px; transition: border-color 0.3s ease;" />
+        </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="trainerStatusSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Attendance Status:</label>
+          <select id="trainerStatusSelect" name="status" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px; transition: border-color 0.3s ease;">
+            <option value="">Choose status</option>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+            <option value="late">Late</option>
+          </select>
+        </div>
+        <button type="button" id="submitTrainerAttendanceBtn" class="btn-primary" style="width: 100%; padding: 12px; font-size: 18px; font-weight: 700; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 8px; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,114,255,0.4); transition: background 0.3s ease, box-shadow 0.3s ease;">
+          Submit My Attendance
+        </button>
+      </form>
+    </section>
+
+    <section class="section">
+      <h2>Mark Student Attendance</h2>
+      <form id="attendanceForm" class="form-container" style="max-width: 600px; margin-bottom: 20px; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: box-shadow 0.3s ease;">
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="courseSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Course:</label>
+          <select id="courseSelect" name="course" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px; transition: border-color 0.3s ease;">
+            <option value="">Choose a course</option>
+            <option value="algebra-basics">Algebra Basics</option>
+            <option value="geometry-fundamentals">Geometry Fundamentals</option>
+            <option value="calculus-i">Calculus I</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="dateSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Date:</label>
+          <input type="date" id="dateSelect" name="date" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px; transition: border-color 0.3s ease;" />
+        </div>
+        <button type="button" id="loadStudentsBtn" class="btn-primary" style="width: 100%; padding: 12px; font-size: 18px; font-weight: 700; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 8px; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,114,255,0.4); transition: background 0.3s ease, box-shadow 0.3s ease;">
+          Load Students
+        </button>
+      </form>
+
+      <div id="attendanceTableContainer" style="display: none; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 700px; transition: box-shadow 0.3s ease;">
+        <h3 style="margin-bottom: 20px; color: #0072ff;">Mark Attendance for <span id="selectedCourse"></span> on <span id="selectedDate"></span></h3>
+        <table id="attendanceTable" class="table-container" style="width: 100%; border-collapse: collapse; font-size: 16px;">
+          <thead>
+            <tr style="background-color: #e6f0ff;">
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">Student Name</th>
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: left;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody">
+            <!-- Students will be loaded here -->
+          </tbody>
+        </table>
+        <button type="button" id="submitAttendanceBtn" class="btn-primary" style="margin-top: 20px; width: 100%; padding: 12px; font-size: 18px; font-weight: 700; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 8px; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,114,255,0.4); transition: background 0.3s ease, box-shadow 0.3s ease;">
+          Submit Attendance
+        </button>
+      </div>
+    </section>
+
+    <section class="section" style="margin-top: 40px;">
+      <h2>Monthly Attendance Summary</h2>
+      <div class="form-group" style="max-width: 400px; margin-bottom: 20px;">
+        <label for="studentSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Student:</label>
+        <select id="studentSelect" style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;">
+          <option value="">Choose a student</option>
+        </select>
+      </div>
+      <div class="form-group" style="max-width: 300px; margin-bottom: 20px;">
+        <label for="monthSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Month:</label>
+        <input type="month" id="monthSelect" style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+      </div>
+      <div id="monthlyAttendanceContainer" style="background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 700px; display: none;">
+        <h3 style="margin-bottom: 20px; color: #0072ff;">Attendance for <span id="monthlyStudentName"></span> in <span id="monthlyMonth"></span></h3>
+        <table id="monthlyAttendanceTable" class="table-container" style="width: 100%; border-collapse: collapse; font-size: 16px;">
+          <thead>
+            <tr style="background-color: #e6f0ff;">
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: center;">Date</th>
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: center;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyAttendanceBody">
+            <!-- Monthly attendance data will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Sample student data for each course
+    const courseStudents = {
+      'algebra-basics': ['John Doe', 'Jane Smith', 'Bob Johnson'],
+      'geometry-fundamentals': ['Alice Brown', 'Charlie Wilson', 'Diana Lee'],
+      'calculus-i': ['Eve Davis', 'Frank Miller', 'Grace Taylor']
+    };
+
+    // Load students button
+    document.getElementById('loadStudentsBtn').addEventListener('click', () => {
+      const courseSelect = document.getElementById('courseSelect');
+      const dateSelect = document.getElementById('dateSelect');
+      const course = courseSelect.value;
+      const date = dateSelect.value;
+
+      if (!course || !date) {
+        alert('Please select both course and date.');
+        return;
+      }
+
+      const students = courseStudents[course];
+      if (!students) {
+        alert('No students found for this course.');
+        return;
+      }
+
+      // Display selected course and date
+      const courseName = courseSelect.options[courseSelect.selectedIndex].text;
+      document.getElementById('selectedCourse').textContent = courseName;
+      document.getElementById('selectedDate').textContent = date;
+
+      // Populate attendance table
+      const tableBody = document.getElementById('attendanceTableBody');
+      tableBody.innerHTML = '';
+
+      students.forEach(student => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${student}</td>
+          <td>
+            <select class="attendance-status" style="padding: 6px 10px; border-radius: 6px; border: 1px solid #bbb; font-size: 15px; font-weight: 600; color: #0072ff; background-color: #e6f0ff; transition: background-color 0.3s ease;">
+              <option value="present" style="color: #28a745;">Present</option>
+              <option value="absent" style="color: #dc3545;">Absent</option>
+              <option value="late" style="color: #ffc107;">Late</option>
+            </select>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // Show the attendance table
+      document.getElementById('attendanceTableContainer').style.display = 'block';
+    });
+
+    // Submit attendance button
+    document.getElementById('submitAttendanceBtn').addEventListener('click', () => {
+      const course = document.getElementById('courseSelect').value;
+      const date = document.getElementById('dateSelect').value;
+      const statusSelects = document.querySelectorAll('.attendance-status');
+
+      const attendanceData = [];
+      const studentsAttendance = {};
+
+      statusSelects.forEach((select, index) => {
+        const studentName = courseStudents[course][index];
+        const status = select.value;
+        attendanceData.push({
+          student: studentName,
+          status: status,
+          course: course,
+          date: date
+        });
+        // Store presence as boolean for admin view (present if status is 'present')
+        studentsAttendance[studentName] = (status === 'present');
+      });
+
+      // Save attendance data in localStorage in the format admin expects
+      const attendanceKey = `attendance_${date}`;
+      let savedData = localStorage.getItem(attendanceKey);
+      let attendanceObj = { students: {}, trainers: {} };
+
+      if (savedData) {
+        attendanceObj = JSON.parse(savedData);
+      }
+
+      // Update students attendance
+      attendanceObj.students = { ...attendanceObj.students, ...studentsAttendance };
+
+      // Save back to localStorage
+      localStorage.setItem(attendanceKey, JSON.stringify(attendanceObj));
+
+      console.log('Attendance submitted:', attendanceData);
+      alert('Attendance submitted successfully!');
+
+      // Reset form
+      document.getElementById('attendanceForm').reset();
+      document.getElementById('attendanceTableContainer').style.display = 'none';
+    });
+
+    // Monthly attendance summary feature
+
+    const studentSelect = document.getElementById('studentSelect');
+    const monthSelect = document.getElementById('monthSelect');
+    const monthlyAttendanceContainer = document.getElementById('monthlyAttendanceContainer');
+    const monthlyAttendanceBody = document.getElementById('monthlyAttendanceBody');
+    const monthlyStudentName = document.getElementById('monthlyStudentName');
+    const monthlyMonth = document.getElementById('monthlyMonth');
+
+    // Populate student select options
+    function populateStudentOptions() {
+      studentSelect.innerHTML = '<option value="">Choose a student</option>';
+      const allStudents = new Set();
+      Object.values(courseStudents).forEach(students => {
+        students.forEach(s => allStudents.add(s));
+      });
+      Array.from(allStudents).sort().forEach(student => {
+        const option = document.createElement('option');
+        option.value = student;
+        option.textContent = student;
+        studentSelect.appendChild(option);
+      });
+    }
+
+    populateStudentOptions();
+
+    // Load monthly attendance data for selected student and month
+    function loadMonthlyAttendance() {
+      const student = studentSelect.value;
+      const month = monthSelect.value; // format: yyyy-mm
+
+      if (!student || !month) {
+        monthlyAttendanceContainer.style.display = 'none';
+        return;
+      }
+
+      monthlyStudentName.textContent = student;
+      monthlyMonth.textContent = month;
+
+      // Clear previous data
+      monthlyAttendanceBody.innerHTML = '';
+
+      // Calculate days in month
+      const [year, monthNum] = month.split('-').map(Number);
+      const daysInMonth = new Date(year, monthNum, 0).getDate();
+
+      // Load attendance data from localStorage for each day
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const attendanceKey = `attendance_${dateStr}`;
+        const savedData = localStorage.getItem(attendanceKey);
+        let status = 'No Data';
+
+        if (savedData) {
+          const attendanceObj = JSON.parse(savedData);
+          if (attendanceObj.students && student in attendanceObj.students) {
+            status = attendanceObj.students[student] ? 'Present' : 'Absent';
+          }
+        }
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="text-align: center; padding: 8px; border: 1px solid #ccc;">${dateStr}</td>
+          <td style="text-align: center; padding: 8px; border: 1px solid #ccc;">${status}</td>
+        `;
+        monthlyAttendanceBody.appendChild(row);
+      }
+
+      monthlyAttendanceContainer.style.display = 'block';
+    }
+
+    studentSelect.addEventListener('change', loadMonthlyAttendance);
+    monthSelect.addEventListener('change', loadMonthlyAttendance);
+  </script>
+</body>
+</html>
+=======
+  </script>
+</body>
+</html>

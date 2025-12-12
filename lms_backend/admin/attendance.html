@@ -1,0 +1,227 @@
+const attendanceDateInput = document.getElementById('attendanceDate');
+    const exportBtn = document.getElementById('exportBtn');
+    const attendanceStats = document.getElementById('attendanceStats');
+    const attendanceTableBody = document.getElementById('attendanceTableBody');
+
+    // Default names (in a real app, this would come from a database)
+    let defaultStudents = ['John Doe', 'Jane Smith', 'Mark Lee', 'Emily Davis', 'Alice Johnson'];
+    const defaultTrainers = ['Mr. Alex', 'Ms. Emma', 'Dr. Smith', 'Prof. Johnson', 'Mr. Lee'];
+
+    // Override defaultStudents to match trainer's student list
+    // This list can be updated here to keep in sync with trainer's my-students.html
+    defaultStudents = ['John Doe', 'Jane Smith', 'Bob Johnson'];
+
+    // Set default date to today
+    attendanceDateInput.valueAsDate = new Date();
+
+    function getAttendanceKey(date) {
+      return `attendance_${date}`;
+    }
+
+    function loadAttendance() {
+      const date = attendanceDateInput.value;
+      if (!date) return;
+
+      const savedData = localStorage.getItem(getAttendanceKey(date));
+      let attendanceData = { students: {}, trainers: {} };
+
+      if (savedData) {
+        attendanceData = JSON.parse(savedData);
+      }
+
+      // Populate stats
+      populateStats(attendanceData);
+
+      // Populate table
+      populateTable(attendanceData);
+    }
+
+    function populateStats(data) {
+      const studentsPresent = Object.values(data.students).filter(Boolean).length;
+      const studentsAbsent = defaultStudents.length - studentsPresent;
+      const trainersPresent = Object.values(data.trainers).filter(Boolean).length;
+      const trainersAbsent = defaultTrainers.length - trainersPresent;
+
+      attendanceStats.innerHTML = `
+        <div class="stat-card">
+          <h3><i class="fas fa-user-graduate"></i> Students Present</h3>
+          <p>${studentsPresent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-user-times"></i> Students Absent</h3>
+          <p>${studentsAbsent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-chalkboard-teacher"></i> Trainers Present</h3>
+          <p>${trainersPresent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-user-times"></i> Trainers Absent</h3>
+          <p>${trainersAbsent}</p>
+        </div>
+      `;
+    }
+
+    function populateTable(data) {
+      attendanceTableBody.innerHTML = '';
+
+      // Students
+      defaultStudents.forEach(name => {
+        const isPresent = data.students[name] || false;
+        const row = `
+          <tr>
+            <td>${name}</td>
+            <td>Student</td>
+            <td><span class="status ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span></td>
+          </tr>
+        `;
+        attendanceTableBody.insertAdjacentHTML('beforeend', row);
+      });
+
+      // Trainers
+      defaultTrainers.forEach(name => {
+        const isPresent = data.trainers[name] || false;
+        const row = `
+          <tr>
+            <td>${name}</td>
+            <td>Trainer</td>
+            <td><span class="status ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span></td>
+          </tr>
+        `;
+        attendanceTableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+=======
+  <script>
+    const attendanceDateInput = document.getElementById('attendanceDate');
+    const exportBtn = document.getElementById('exportBtn');
+    const attendanceStats = document.getElementById('attendanceStats');
+    const attendanceTableBody = document.getElementById('attendanceTableBody');
+
+    // Default names (in a real app, this would come from a database)
+    const defaultStudents = ['John Doe', 'Jane Smith', 'Mark Lee', 'Emily Davis', 'Alice Johnson'];
+    const defaultTrainers = ['Mr. Alex', 'Ms. Emma', 'Dr. Smith', 'Prof. Johnson', 'Mr. Lee'];
+
+    // Set default date to today
+    attendanceDateInput.valueAsDate = new Date();
+
+    function getAttendanceKey(date) {
+      return `attendance_${date}`;
+    }
+
+    function loadAttendance() {
+      const date = attendanceDateInput.value;
+      if (!date) return;
+
+      const savedData = localStorage.getItem(getAttendanceKey(date));
+      let attendanceData = { students: {}, trainers: {} };
+
+      if (savedData) {
+        attendanceData = JSON.parse(savedData);
+      }
+
+      // Populate stats
+      populateStats(attendanceData);
+
+      // Populate table
+      populateTable(attendanceData);
+    }
+
+    function populateStats(data) {
+      const studentsPresent = Object.values(data.students).filter(Boolean).length;
+      const studentsAbsent = defaultStudents.length - studentsPresent;
+      const trainersPresent = Object.values(data.trainers).filter(Boolean).length;
+      const trainersAbsent = defaultTrainers.length - trainersPresent;
+
+      attendanceStats.innerHTML = `
+        <div class="stat-card">
+          <h3><i class="fas fa-user-graduate"></i> Students Present</h3>
+          <p>${studentsPresent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-user-times"></i> Students Absent</h3>
+          <p>${studentsAbsent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-chalkboard-teacher"></i> Trainers Present</h3>
+          <p>${trainersPresent}</p>
+        </div>
+        <div class="stat-card">
+          <h3><i class="fas fa-user-times"></i> Trainers Absent</h3>
+          <p>${trainersAbsent}</p>
+        </div>
+      `;
+    }
+
+    function populateTable(data) {
+      attendanceTableBody.innerHTML = '';
+
+      // Students
+      defaultStudents.forEach(name => {
+        const isPresent = data.students[name] || false;
+        const row = `
+          <tr>
+            <td>${name}</td>
+            <td>Student</td>
+            <td><span class="status ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span></td>
+          </tr>
+        `;
+        attendanceTableBody.insertAdjacentHTML('beforeend', row);
+      });
+
+      // Trainers
+      defaultTrainers.forEach(name => {
+        const isPresent = data.trainers[name] || false;
+        const row = `
+          <tr>
+            <td>${name}</td>
+            <td>Trainer</td>
+            <td><span class="status ${isPresent ? 'present' : 'absent'}">${isPresent ? 'Present' : 'Absent'}</span></td>
+          </tr>
+        `;
+        attendanceTableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+
+    function exportToCSV() {
+      const date = attendanceDateInput.value;
+      if (!date) {
+        alert('Please select a date to export.');
+        return;
+      }
+
+      const savedData = localStorage.getItem(getAttendanceKey(date));
+      if (!savedData) {
+        alert('No attendance data found for the selected date.');
+        return;
+      }
+
+      const attendanceData = JSON.parse(savedData);
+      let csv = 'Name,Role,Status\n';
+
+      defaultStudents.forEach(name => {
+        const isPresent = attendanceData.students[name] || false;
+        csv += `${name},Student,${isPresent ? 'Present' : 'Absent'}\n`;
+      });
+
+      defaultTrainers.forEach(name => {
+        const isPresent = attendanceData.trainers[name] || false;
+        csv += `${name},Trainer,${isPresent ? 'Present' : 'Absent'}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `attendance_${date}.csv`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    attendanceDateInput.addEventListener('change', loadAttendance);
+    exportBtn.addEventListener('click', exportToCSV);
+
+    // Load attendance for default date on page load
+    window.addEventListener('DOMContentLoaded', loadAttendance);

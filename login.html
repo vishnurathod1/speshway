@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-box">
+      <div class="logo-container">
+        <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="auth-logo">
+      </div>
+      
+      <h1 class="auth-title">Admin Login</h1>
+      
+      <form id="adminLoginForm" action="/accounts/login/" method="post" class="login-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="form-options">
+          <label class="show-password">
+            <input type="checkbox" id="showPassword"> Show Password
+          </label>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="form-footer">
+          <a href="reset.html" class="forgot-password">Forgot Password?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="/assets/js/authHelper.js"></script>
+  <script src="/assets/js/auth.js"></script>
+</body>
+</html>

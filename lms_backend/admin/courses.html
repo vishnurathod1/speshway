@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Courses</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script defer src="/assets/js/dashboard.js"></script>
+  <style>
+    .courses-section {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: #2a2738;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+    .courses-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .course-item {
+      background: #3a3748;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .course-info {
+      flex: 1;
+    }
+    .course-info h4 {
+      margin: 0 0 10px 0;
+      color: #ffb800;
+    }
+    .course-details {
+      color: #ccc;
+      font-size: 14px;
+    }
+    .course-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-edit, .btn-delete {
+      background: #ffb800;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #2a2738;
+      transition: transform 0.2s ease;
+    }
+    .btn-edit:hover, .btn-delete:hover {
+      transform: translateY(-2px);
+    }
+    .modal-content {
+      background: #2a2738;
+      padding: 20px;
+      border-radius: 12px;
+      width: 500px;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+    .modal-content h3 {
+      margin-bottom: 15px;
+      color: #ffb800;
+    }
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #3a3748;
+      color: #fff;
+    }
+    .modal-content button {
+      background: #ffb800;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #2a2738;
+    }
+    .close-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content" style="padding-top: 10px;">
+    <header style="display: flex; justify-content: space-between; align-items: center; padding-right: 20px; padding-bottom: 10px;">
+      <h1>Manage Courses</h1>
+      <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+        <div class="search-bar" style="position: relative; display: flex; align-items: center;">
+          <i class="fas fa-search" style="position: absolute; left: 10px; color: #999;"></i>
+          <input id="globalSearch" placeholder="Search courses..." style="padding-left: 35px; padding-right: 35px;" />
+          <i id="clearSearch" class="fas fa-times" style="position: absolute; right: 10px; cursor: pointer; display: none; color: #999;"></i>
+        </div>
+        <button onclick="openModal('addCourseModal')" class="btn-submit">+ Add Course</button>
+        <button id="logoutBtn" class="logout" onclick="window.location.href='../login.html'">Logout</button>
+        <button id="notifBell" class="notification"><i class="fas fa-bell"></i></button>
+        <button onclick="openProfileModal()" class="profile"><i class="fas fa-user"></i></button>
+      </div>
+    </header>
+
+    <section class="courses-section">
+      <h3>Courses List</h3>
+      <ul class="courses-list">
+        <li class="course-item">
+          <div class="course-info">
+            <h4>Mathematics Basics</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> Mr. Alex Johnson</p>
+              <p><strong>Students Enrolled:</strong> 50</p>
+              <p><strong>Duration:</strong> 12 weeks</p>
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Description:</strong> An introductory course covering fundamental mathematical concepts including algebra, geometry, and basic calculus.</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li class="course-item">
+          <div class="course-info">
+            <h4>Biology Fundamentals</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> Ms. Emma Davis</p>
+              <p><strong>Students Enrolled:</strong> 35</p>
+              <p><strong>Duration:</strong> 10 weeks</p>
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Description:</strong> Explore the basics of biology, including cell structure, genetics, evolution, and ecosystems.</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li class="course-item">
+          <div class="course-info">
+            <h4>Physics Principles</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> Dr. Michael Brown</p>
+              <p><strong>Students Enrolled:</strong> 42</p>
+              <p><strong>Duration:</strong> 14 weeks</p>
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Description:</strong> A comprehensive course on physics principles, covering mechanics, thermodynamics, electricity, and magnetism.</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li class="course-item">
+          <div class="course-info">
+            <h4>Chemistry Essentials</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> Prof. Sarah Wilson</p>
+              <p><strong>Students Enrolled:</strong> 28</p>
+              <p><strong>Duration:</strong> 11 weeks</p>
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Description:</strong> Learn the core concepts of chemistry, including atomic structure, chemical reactions, and laboratory techniques.</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+        <li class="course-item">
+          <div class="course-info">
+            <h4>Computer Science Fundamentals</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> Mr. David Lee</p>
+              <p><strong>Students Enrolled:</strong> 65</p>
+              <p><strong>Duration:</strong> 16 weeks</p>
+              <p><strong>Status:</strong> Active</p>
+              <p><strong>Description:</strong> Introduction to computer science, covering programming basics, algorithms, data structures, and software development.</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div id="addCourseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('addCourseModal')">&times;</span>
+      <h3>Add New Course</h3>
+      <input type="text" placeholder="Course Title" id="courseTitle" />
+      <input type="text" placeholder="Trainer Name" id="trainerName" />
+      <input type="text" placeholder="Duration (e.g., 12 weeks)" id="courseDuration" />
+      <select id="courseStatus">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+      <textarea placeholder="Course Description" id="courseDescription"></textarea>
+      <button onclick="addCourse()">Add Course</button>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div id="editCourseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('editCourseModal')">&times;</span>
+      <h3>Edit Course</h3>
+      <input type="hidden" id="editCourseId" />
+      <input type="text" placeholder="Course Title" id="editCourseTitle" />
+      <input type="text" placeholder="Trainer Name" id="editTrainerName" />
+      <input type="text" placeholder="Duration (e.g., 12 weeks)" id="editCourseDuration" />
+      <select id="editCourseStatus">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+      <textarea placeholder="Course Description" id="editCourseDescription"></textarea>
+      <button onclick="updateCourse()">Update Course</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    function addCourse() {
+      const title = document.getElementById('courseTitle').value.trim();
+      const trainer = document.getElementById('trainerName').value.trim();
+      const duration = document.getElementById('courseDuration').value.trim();
+      const status = document.getElementById('courseStatus').value;
+      const description = document.getElementById('courseDescription').value.trim();
+      if (title && trainer && duration && description) {
+        // Create new course item
+        const list = document.querySelector('.courses-list');
+        const li = document.createElement('li');
+        li.className = 'course-item';
+        li.innerHTML = `
+          <div class="course-info">
+            <h4>${title}</h4>
+            <div class="course-details">
+              <p><strong>Trainer:</strong> ${trainer}</p>
+              <p><strong>Students Enrolled:</strong> 0</p>
+              <p><strong>Duration:</strong> ${duration}</p>
+              <p><strong>Status:</strong> ${status}</p>
+              <p><strong>Description:</strong> ${description}</p>
+            </div>
+          </div>
+          <div class="course-actions">
+            <button class="btn-edit">Edit</button>
+            <button class="btn-delete">Delete</button>
+          </div>
+        `;
+        // Add event listeners
+        li.querySelector('.btn-delete').addEventListener('click', function() {
+          li.remove();
+        });
+        li.querySelector('.btn-edit').addEventListener('click', function() {
+          editCourse(li);
+        });
+        list.appendChild(li);
+        alert('Course added successfully!');
+        closeModal('addCourseModal');
+        document.getElementById('courseTitle').value = '';
+        document.getElementById('trainerName').value = '';
+        document.getElementById('courseDuration').value = '';
+        document.getElementById('courseDescription').value = '';
+      } else {
+        alert('Please fill all fields.');
+      }
+    }
+
+    // Attach events to existing buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      const items = document.querySelectorAll('.course-item');
+      items.forEach(item => {
+        const deleteBtn = item.querySelector('.btn-delete');
+        const editBtn = item.querySelector('.btn-edit');
+        deleteBtn.addEventListener('click', function() {
+          item.remove();
+        });
+        editBtn.addEventListener('click', function() {
+          editCourse(item);
+        });
+      });
+    });
+
+    function editCourse(item) {
+      const title = item.querySelector('h4').textContent;
+      const details = item.querySelector('.course-details').children;
+      const trainer = details[0].textContent.replace('Trainer: ', '');
+      const duration = details[2].textContent.replace('Duration: ', '');
+      const status = details[3].textContent.replace('Status: ', '');
+      const description = details[4].textContent.replace('Description: ', '');
+
+      document.getElementById('editCourseTitle').value = title;
+      document.getElementById('editTrainerName').value = trainer;
+      document.getElementById('editCourseDuration').value = duration;
+      document.getElementById('editCourseStatus').value = status;
+      document.getElementById('editCourseDescription').value = description;
+
+      const modal = document.getElementById('editCourseModal');
+      modal.dataset.item = item;
+
+      openModal('editCourseModal');
+    }
+
+    function updateCourse() {
+      const title = document.getElementById('editCourseTitle').value.trim();
+      const trainer = document.getElementById('editTrainerName').value.trim();
+      const duration = document.getElementById('editCourseDuration').value.trim();
+      const status = document.getElementById('editCourseStatus').value;
+      const description = document.getElementById('editCourseDescription').value.trim();
+
+      if (title && trainer && duration && description) {
+        // Update the course item
+        const modal = document.getElementById('editCourseModal');
+        const item = modal.dataset.item;
+        if (item) {
+          item.querySelector('h4').textContent = title;
+          const details = item.querySelector('.course-details').children;
+          details[0].innerHTML = `<strong>Trainer:</strong> ${trainer}`;
+          details[2].innerHTML = `<strong>Duration:</strong> ${duration}`;
+          details[3].innerHTML = `<strong>Status:</strong> ${status}`;
+          details[4].innerHTML = `<strong>Description:</strong> ${description}`;
+        }
+        alert('Course updated successfully!');
+        closeModal('editCourseModal');
+        document.getElementById('editCourseTitle').value = '';
+        document.getElementById('editTrainerName').value = '';
+        document.getElementById('editCourseDuration').value = '';
+        document.getElementById('editCourseDescription').value = '';
+      } else {
+        alert('Please fill all fields.');
+      }
+    }
+
+    // Search functionality
+    const globalSearch = document.getElementById('globalSearch');
+    const clearSearch = document.getElementById('clearSearch');
+
+    globalSearch.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      clearSearch.style.display = query ? 'block' : 'none';
+      const items = document.querySelectorAll('.course-item');
+      let anyVisible = false;
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const isVisible = text.includes(query);
+        item.style.display = isVisible ? '' : 'none';
+        if (isVisible) anyVisible = true;
+      });
+      // Show "No data found" message if no items visible
+      let noDataElem = document.getElementById('noDataMessage');
+      if (!noDataElem) {
+        noDataElem = document.createElement('div');
+        noDataElem.id = 'noDataMessage';
+        noDataElem.style.color = '#ffb800';
+        noDataElem.style.textAlign = 'center';
+        noDataElem.style.marginTop = '20px';
+        noDataElem.textContent = 'No courses found.';
+        document.querySelector('.courses-section').appendChild(noDataElem);
+      }
+      noDataElem.style.display = anyVisible ? 'none' : 'block';
+    });
+
+    clearSearch.addEventListener('click', function() {
+      globalSearch.value = '';
+      clearSearch.style.display = 'none';
+      const items = document.querySelectorAll('.course-item');
+      items.forEach(item => {
+        item.style.display = '';
+      });
+      const noDataElem = document.getElementById('noDataMessage');
+      if (noDataElem) noDataElem.style.display = 'none';
+      globalSearch.focus();
+    });
+  </script>
+</body>
+</html>

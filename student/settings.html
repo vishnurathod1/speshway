@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Settings - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Settings</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Account Settings</h2>
+      <form id="settingsForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" value="student123" readonly />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" value="student@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" value="John Doe" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" value="+1234567890" />
+        </div>
+        <div class="form-group">
+          <label for="currentPassword">Current Password</label>
+          <input type="password" id="currentPassword" />
+        </div>
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm New Password</label>
+          <input type="password" id="confirmPassword" />
+        </div>
+        <button type="submit" class="btn-primary">Save Changes</button>
+      </form>
+    </section>
+
+    <section class="section">
+      <h2>Notification Preferences</h2>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="emailNotifications" checked /> Email notifications for assignments
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="classReminders" checked /> Reminders for live classes
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="gradeUpdates" checked /> Notifications for grade updates
+        </label>
+      </div>
+      <button onclick="saveNotificationSettings()" class="btn-primary">Save Preferences</button>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = '../student/student-login.html';
+    });
+
+    // Settings form submission
+    document.getElementById('settingsForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (newPassword && newPassword !== confirmPassword) {
+        alert('New passwords do not match.');
+        return;
+      }
+
+      alert('Settings updated successfully!');
+      // In a real app, this would send data to the server
+    });
+
+    function saveNotificationSettings() {
+      alert('Notification preferences saved!');
+      // In a real app, this would save preferences to the server
+    }
+  </script>
+</body>
+</html>

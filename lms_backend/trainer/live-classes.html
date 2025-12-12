@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live Classes - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html" class="active"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Live Classes</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button onclick="window.location.href='dashboard.html'" style="padding: 8px 12px; background: #6c757d; border: none; border-radius: 6px; color: white; cursor: pointer;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+          <h2>Scheduled Live Classes</h2>
+        </div>
+        <button id="scheduleBtn" class="btn-primary" style="padding: 10px 20px; font-size: 16px; font-weight: 700; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 8px; color: white; cursor: pointer; box-shadow: 0 4px 8px rgba(0,114,255,0.4); transition: background 0.3s ease, box-shadow 0.3s ease;">
+          <i class="fas fa-plus"></i> Schedule New Class
+        </button>
+      </div>
+
+      <div id="classesContainer" style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <!-- Classes will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Modal for scheduling new class -->
+    <div id="scheduleModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+      <div style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 500px; width: 90%;">
+        <h3 style="margin-bottom: 20px; color: #0072ff;">Schedule New Live Class</h3>
+        <form id="scheduleForm">
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="classTitle" style="font-weight: 700; display: block; margin-bottom: 5px;">Class Title:</label>
+            <input type="text" id="classTitle" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="classCourse" style="font-weight: 700; display: block; margin-bottom: 5px;">Course:</label>
+            <select id="classCourse" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;">
+              <option value="">Select Course</option>
+              <option value="algebra-basics">Algebra Basics</option>
+              <option value="geometry-fundamentals">Geometry Fundamentals</option>
+              <option value="calculus-i">Calculus I</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="classDate" style="font-weight: 700; display: block; margin-bottom: 5px;">Date:</label>
+            <input type="date" id="classDate" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 15px;">
+            <label for="classTime" style="font-weight: 700; display: block; margin-bottom: 5px;">Time:</label>
+            <input type="time" id="classTime" required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+          </div>
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label for="classLink" style="font-weight: 700; display: block; margin-bottom: 5px;">Meeting Link:</label>
+            <input type="url" id="classLink" placeholder="https://zoom.us/j/..." required style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" id="cancelBtn" class="btn-secondary" style="padding: 10px 20px; background: #6c757d; border: none; border-radius: 6px; color: white; cursor: pointer;">Cancel</button>
+            <button type="submit" class="btn-primary" style="padding: 10px 20px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 6px; color: white; cursor: pointer;">Schedule</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Modal controls
+    const scheduleBtn = document.getElementById('scheduleBtn');
+    const scheduleModal = document.getElementById('scheduleModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const scheduleForm = document.getElementById('scheduleForm');
+    const classesContainer = document.getElementById('classesContainer');
+
+    scheduleBtn.addEventListener('click', () => {
+      scheduleModal.style.display = 'flex';
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      scheduleModal.style.display = 'none';
+      scheduleForm.reset();
+    });
+
+    // Load classes from localStorage
+    function loadClasses() {
+      let classes = JSON.parse(localStorage.getItem('liveClasses')) || [];
+
+      // If no classes in localStorage, add sample data
+      if (classes.length === 0) {
+        classes = [
+          {
+            title: 'Advanced Calculus',
+            course: 'Calculus I',
+            date: '2024-10-12',
+            time: '10:00 AM',
+            link: 'https://zoom.us/j/1234567890'
+          },
+          {
+            title: 'Trigonometry',
+            course: 'Geometry Fundamentals',
+            date: '2024-10-14',
+            time: '2:00 PM',
+            link: 'https://meet.google.com/abc-defg-hij'
+          },
+          {
+            title: 'Chemistry Lab',
+            course: 'Chemistry Basics',
+            date: '2024-10-16',
+            time: '11:00 AM',
+            link: 'https://zoom.us/j/0987654321'
+          }
+        ];
+        localStorage.setItem('liveClasses', JSON.stringify(classes));
+      }
+
+      classesContainer.innerHTML = '';
+
+      classes.forEach((cls, index) => {
+        const classCard = document.createElement('div');
+        classCard.style.cssText = `
+          background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 300px; transition: transform 0.3s ease;
+        `;
+        classCard.innerHTML = `
+          <h4 style="margin-bottom: 10px; color: #0072ff;">${cls.title}</h4>
+          <p style="margin: 5px 0; color: #555;"><strong>Course:</strong> ${cls.course}</p>
+          <p style="margin: 5px 0; color: #555;"><strong>Date:</strong> ${cls.date}</p>
+          <p style="margin: 5px 0; color: #555;"><strong>Time:</strong> ${cls.time}</p>
+          <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <a href="${cls.link}" target="_blank" class="btn-primary" style="flex: 1; text-align: center; padding: 8px; text-decoration: none;"><i class="fas fa-external-link-alt"></i> Join</a>
+            <button class="btn-danger" onclick="deleteClass(${index})" style="padding: 8px; background: #dc3545; border: none; border-radius: 6px; color: white; cursor: pointer;"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+        classesContainer.appendChild(classCard);
+      });
+    }
+
+    // Schedule new class
+    scheduleForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('classTitle').value;
+      const course = document.getElementById('classCourse').value;
+      const date = document.getElementById('classDate').value;
+      const time = document.getElementById('classTime').value;
+      const link = document.getElementById('classLink').value;
+
+      const newClass = { title, course, date, time, link };
+      const classes = JSON.parse(localStorage.getItem('liveClasses')) || [];
+      classes.push(newClass);
+      localStorage.setItem('liveClasses', JSON.stringify(classes));
+
+      scheduleModal.style.display = 'none';
+      scheduleForm.reset();
+      loadClasses();
+      alert('Live class scheduled successfully!');
+    });
+
+    // Delete class
+    function deleteClass(index) {
+      if (confirm('Are you sure you want to delete this class?')) {
+        const classes = JSON.parse(localStorage.getItem('liveClasses')) || [];
+        classes.splice(index, 1);
+        localStorage.setItem('liveClasses', JSON.stringify(classes));
+        loadClasses();
+      }
+    }
+
+    // Initial load
+    loadClasses();
+
+    // Expose deleteClass to global scope for inline onclick
+    window.deleteClass = deleteClass;
+  </script>
+</body>
+</html>

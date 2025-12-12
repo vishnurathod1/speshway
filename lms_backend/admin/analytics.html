@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analytics</title>
+<link rel="stylesheet" href="/assets/css/admin.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1f1d2b;
+    color: #fff;
+  }
+  .sidebar {
+    width: 220px;
+    background-color: #2a2738;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+  .sidebar h2 {
+    color: #ffb800;
+    margin-bottom: 20px;
+  }
+  .sidebar nav a {
+    display: block;
+    color: #ccc;
+    text-decoration: none;
+    padding: 10px 0;
+    border-left: 4px solid transparent;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+  }
+  .sidebar nav a.active,
+  .sidebar nav a:hover {
+    color: #ffb800;
+    border-left-color: #ffb800;
+    background-color: #3a3748;
+  }
+  .content {
+    flex-grow: 1;
+    padding: 30px 30px 30px 240px;
+    box-sizing: border-box;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .navbar h1 {
+    margin: 0;
+    color: #ffb800;
+  }
+  .nav-actions button {
+    background-color: #ffb800;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #2a2738;
+    transition: background-color 0.3s ease;
+  }
+  .nav-actions button:hover {
+    background-color: #e6a700;
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .metric-card {
+    background-color: #2a2738;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .metric-card h3 {
+    margin: 0 0 10px 0;
+    color: #ffb800;
+    font-size: 18px;
+  }
+  .metric-card p {
+    margin: 0;
+    color: #ccc;
+    font-size: 12px;
+  }
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.chart-container {
+  background-color: #2a2738;
+  padding: 20px;
+  min-height: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.chart-container h2 {
+  margin-top: 0;
+  color: #ffb800;
+}
+canvas {
+  max-width: 100%;
+  height: 550px;
+}
+
+@media (max-width: 900px) {
+  .charts {
+    grid-template-columns: 1fr;
+  }
+  .content {
+    padding: 20px 20px 20px 240px;
+  }
+}
+  section h2 {
+    margin-top: 0;
+    color: #ffb800;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2a2738;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #3a3748;
+  }
+  th {
+    background-color: #3a3748;
+    color: #ffb800;
+  }
+  tbody tr:hover {
+    background-color: #3f3c52;
+  }
+  button.sort-btn {
+    margin-top: 15px;
+    background-color: #ffb800;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #2a2738;
+    transition: background-color 0.3s ease;
+  }
+  button.sort-btn:hover {
+    background-color: #e6a700;
+  }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <div class="content">
+    <div class="navbar">
+      <h1>Analytics</h1>
+      <div class="nav-actions">
+        <button id="logoutBtn" onclick="window.location.href='../login.html'">Logout</button>
+      </div>
+    </div>
+
+    <section class="metrics">
+      <div class="metric-card">
+        <h3>120</h3>
+        <p>New Users</p>
+      </div>
+      <div class="metric-card">
+        <h3>85</h3>
+        <p>Courses Completed</p>
+      </div>
+      <div class="metric-card">
+        <h3>45</h3>
+        <p>Active Trainers</p>
+      </div>
+      <div class="metric-card">
+        <h3>230</h3>
+        <p>Assignments Submitted</p>
+      </div>
+    </section>
+
+    <section class="charts">
+      <div class="chart-container">
+        <h2>Course Enrollments</h2>
+        <canvas id="enrollmentsChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Assignment Submissions</h2>
+        <canvas id="assignmentsChart"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <script src="/assets/js/admin.js"></script>
+  <script>
+    const enrollmentsCtx = document.getElementById('enrollmentsChart').getContext('2d');
+    const enrollmentsChart = new Chart(enrollmentsCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Mathematics 101', 'Physics 201', 'Chemistry 101', 'Biology Basics', 'Computer Science'],
+        datasets: [{
+          label: 'Total Students',
+          data: [25, 18, 20, 22, 35],
+          backgroundColor: '#ffb800'
+        }]
+      },
+      options: {
+        responsive: true,
+        layout: {
+          padding: {
+            bottom: 200
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: '#fff' }
+          },
+          x: {
+            ticks: { 
+              color: '#fff',
+              maxRotation: 90,
+              minRotation: 90,
+              font: {
+                size: 6
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: '#fff' } }
+        }
+      }
+    });
+
+    const assignmentsCtx = document.getElementById('assignmentsChart').getContext('2d');
+    const assignmentsChart = new Chart(assignmentsCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+        datasets: [{
+          label: 'Assignments Submitted',
+          data: [10, 15, 20, 18, 25],
+          borderColor: '#ffb800',
+          backgroundColor: 'rgba(255, 184, 0, 0.3)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: '#fff' }
+          },
+          x: {
+            ticks: { color: '#fff' }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: '#fff' } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

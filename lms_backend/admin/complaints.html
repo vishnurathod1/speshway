@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaints Management - Admin</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="/assets/js/complaints.js" defer></script>
+  <script src="/assets/js/admin.js"></script>
+  <script src="/assets/js/auth.js"></script>
+</head>
+<body class="admin">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="students.html"><i class="fas fa-user-graduate"></i> Students</a></li>
+      <li><a href="trainers.html"><i class="fas fa-chalkboard-teacher"></i> Trainers</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="complaints.html" class="active"><i class="fas fa-exclamation-triangle"></i> Complaints</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- HEADER -->
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Complaints</h1>
+      <div class="header-right">
+        <div class="search-bar" style="position: relative; display: inline-block;">
+          <input id="searchInput" placeholder="Search complaints..." style="padding-right: 35px;" />
+          <i class="fas fa-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none;"></i>
+        </div>
+      <div class="header-icons">
+        <div class="notif" id="notifBell" title="Notifications (click)">
+          <i class="fas fa-bell"></i>
+          <span id="notifBadge" class="badge">0</span>
+        </div>
+        <div class="profile-circle" onclick="openProfileModal()"></div>
+        <div class="profile-info">
+          Snigdha<br/><small>Administrator</small>
+        </div>
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+      </div>
+    </header>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+      <div class="card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3 id="total-complaints">0</h3>
+        <p>Total Complaints</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-clock"></i>
+        <h3 id="pending-complaints">0</h3>
+        <p>Pending Complaints</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-check-circle"></i>
+        <h3 id="resolved-complaints">0</h3>
+        <p>Resolved Complaints</p>
+      </div>
+    </div>
+
+    <!-- Complaints Tables -->
+    <div class="table-container">
+      <h3>Student Complaints About Happy Learning Platform</h3>
+      <div style="margin-bottom: 15px;">
+        <input
+          type="text"
+          id="studentPlatformSearch"
+          placeholder="Search student platform complaints..."
+          style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; width: 250px;"
+        />
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Complaint</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentPlatformComplaintsTableBody">
+          <!-- Student platform complaints will be rendered here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Student Complaints About Trainers</h3>
+      <div style="margin-bottom: 15px;">
+        <input
+          type="text"
+          id="studentTrainerSearch"
+          placeholder="Search student trainer complaints..."
+          style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; width: 250px;"
+        />
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Trainer</th>
+            <th>Complaint</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTrainerComplaintsTableBody">
+          <!-- Student trainer complaints will be rendered here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Trainer Complaints About Platform Issues</h3>
+      <div style="margin-bottom: 15px;">
+        <input
+          type="text"
+          id="trainerPlatformSearch"
+          placeholder="Search trainer platform complaints..."
+          style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; width: 250px;"
+        />
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Trainer</th>
+            <th>Complaint</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="trainerPlatformComplaintsTableBody">
+          <!-- Trainer platform complaints will be rendered here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal for Viewing Complaint -->
+  <div id="complaintModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 20px; border-radius: 8px; width: 500px;">
+      <h3 id="modalTitle">Complaint Details</h3>
+      <p id="modalSubmitterRow"><strong id="modalSubmitterLabel">Student:</strong> <span id="modalStudent"></span></p>
+      <p><strong>Type:</strong> <span id="modalType"></span></p>
+      <p id="modalTrainerField"><strong>Trainer:</strong> <span id="modalTrainer"></span></p>
+      <p><strong>Complaint:</strong> <span id="modalComplaint"></span></p>
+      <p><strong>Date:</strong> <span id="modalDate"></span></p>
+      <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button onclick="resolveComplaintFromModal()">Resolve</button>
+        <button onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Trainer - Admin</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="admin">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <div class="logo">➕ Add Trainer</div>
+      <div class="user-menu">
+        <img src="/assets/images/avatar.png" alt="Admin Avatar" />
+        <span>Admin</span>
+      </div>
+    </header>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button onclick="openAddModal('trainer')" class="btn-primary">➕ Add Trainer</button>
+    </div>
+
+    <!-- Trainers Table -->
+    <div class="table-container">
+      <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <h3>Trainers Management</h3>
+        <div style="position: relative; display: flex; align-items: center;">
+          <input
+            type="text"
+            id="trainerSearch"
+            placeholder="Search trainers..."
+            style="padding: 8px 35px 8px 12px; border-radius: 8px; border: 1px solid #ccc; width: 250px;"
+          />
+          <button
+            onclick="clearSearch('trainerSearch', 'trainerTableBody')"
+            id="clearTrainerSearch"
+            style="position: absolute; right: 8px; background: none; border: none; color: #666; cursor: pointer; font-size: 16px; display: none;"
+            title="Clear search"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <table id="trainerTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Experience</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="trainerTableBody">
+          <!-- Trainers will be rendered here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Trainer data management
+    class TrainerManager {
+      constructor() {
+        this.trainers = this.getTrainersFromStorage();
+        this.initializeEventListeners();
+      }
+
+      getTrainersFromStorage() {
+        const trainers = localStorage.getItem('trainers');
+        return trainers ? JSON.parse(trainers) : [];
+      }
+
+      saveTrainersToStorage() {
+        localStorage.setItem('trainers', JSON.stringify(this.trainers));
+      }
+
+      generateTrainerId() {
+        return 'TRN' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
+      }
+
+      validateForm(formData) {
+        const errors = {};
+
+        // Name validation
+        if (!formData.name || formData.name.trim().length < 2) {
+          errors.name = 'Name must be at least 2 characters long';
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email || !emailRegex.test(formData.email)) {
+          errors.email = 'Please enter a valid email address';
+        }
+
+        // Check for duplicate email
+        if (formData.email && this.trainers.some(trainer => trainer.email.toLowerCase() === formData.email.toLowerCase())) {
+          errors.email = 'A trainer with this email already exists';
+        }
+
+        // Subject validation
+        if (!formData.subject || formData.subject.trim().length < 2) {
+          errors.subject = 'Subject/Specialization must be at least 2 characters long';
+        }
+
+        // Phone validation (if provided)
+        if (formData.phone && formData.phone.trim()) {
+          const phoneRegex = /^[0-9+\-\s()]{10,15}$/;
+          if (!phoneRegex.test(formData.phone)) {
+            errors.phone = 'Please enter a valid phone number';
+          }
+        }
+
+        // Experience validation (if provided)
+        if (formData.experience && (formData.experience < 0 || formData.experience > 50)) {
+          errors.experience = 'Years of experience must be between 0 and 50';
+        }
+
+        // Status validation
+        if (!formData.status) {
+          errors.status = 'Please select a status';
+        }
+
+        return errors;
+      }
+
+      showMessage(message, type = 'info') {
+        const messageContainer = document.getElementById('messageContainer');
+        messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
+
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+          setTimeout(() => {
+            messageContainer.innerHTML = '';
+          }, 5000);
+        }
+      }
+
+      clearErrors() {
+        const errorElements = document.querySelectorAll('.field-error');
+        errorElements.forEach(element => element.textContent = '');
+      }
+
+      showErrors(errors) {
+        this.clearErrors();
+
+        Object.keys(errors).forEach(field => {
+          const errorElement = document.getElementById(`${field}Error`);
+          if (errorElement) {
+            errorElement.textContent = errors[field];
+          }
+        });
+      }
+
+      addTrainer(trainerData) {
+        const trainer = {
+          id: this.generateTrainerId(),
+          name: trainerData.name.trim(),
+          email: trainerData.email.trim().toLowerCase(),
+          phone: trainerData.phone ? trainerData.phone.trim() : '',
+          subject: trainerData.subject.trim(),
+          courses: trainerData.courses ? trainerData.courses.trim() : '',
+          experience: trainerData.experience ? parseInt(trainerData.experience) : 0,
+          status: trainerData.status,
+          joinDate: trainerData.joinDate || new Date().toISOString().split('T')[0],
+          createdAt: new Date().toISOString()
+        };
+
+        this.trainers.push(trainer);
+        this.saveTrainersToStorage();
+        return trainer;
+      }
+
+      resetForm() {
+        document.getElementById('addTrainerForm').reset();
+        this.clearErrors();
+        document.getElementById('messageContainer').innerHTML = '';
+      }
+
+      async handleFormSubmit(e) {
+        e.preventDefault();
+
+        const formData = {
+          name: document.getElementById('trainerName').value,
+          email: document.getElementById('trainerEmail').value,
+          phone: document.getElementById('trainerPhone').value,
+          subject: document.getElementById('trainerSubject').value,
+          courses: document.getElementById('trainerCourses').value,
+          experience: document.getElementById('trainerExperience').value,
+          status: document.getElementById('trainerStatus').value,
+          joinDate: document.getElementById('trainerJoinDate').value
+        };
+
+        // Clear previous errors
+        this.clearErrors();
+
+        // Validate form
+        const errors = this.validateForm(formData);
+
+        if (Object.keys(errors).length > 0) {
+          this.showErrors(errors);
+          this.showMessage('Please fix the errors below', 'error');
+          return;
+        }
+
+        // Show loading state
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.querySelector('.btn-text');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        btnText.textContent = 'Adding Trainer...';
+        loadingSpinner.style.display = 'inline-block';
+        submitBtn.disabled = true;
+
+        try {
+          // Simulate API call delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          // Add trainer
+          const newTrainer = this.addTrainer(formData);
+
+          // Show success message
+          this.showMessage(`Trainer "${newTrainer.name}" has been added successfully!`, 'success');
+
+          // Reset form
+          this.resetForm();
+
+          // Update trainers page if it exists
+          if (window.updateTrainersList) {
+            window.updateTrainersList();
+          }
+
+        } catch (error) {
+          this.showMessage('An error occurred while adding the trainer. Please try again.', 'error');
+        } finally {
+          // Reset button state
+          btnText.textContent = 'Add Trainer';
+          loadingSpinner.style.display = 'none';
+          submitBtn.disabled = false;
+        }
+      }
+
+      initializeEventListeners() {
+        const form = document.getElementById('addTrainerForm');
+        const resetBtn = document.getElementById('resetBtn');
+
+        form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+        resetBtn.addEventListener('click', () => this.resetForm());
+
+        // Real-time validation
+        const nameInput = document.getElementById('trainerName');
+        const emailInput = document.getElementById('trainerEmail');
+        const phoneInput = document.getElementById('trainerPhone');
+        const subjectInput = document.getElementById('trainerSubject');
+        const experienceInput = document.getElementById('trainerExperience');
+
+        nameInput.addEventListener('blur', () => {
+          if (nameInput.value && nameInput.value.trim().length < 2) {
+            document.getElementById('nameError').textContent = 'Name must be at least 2 characters long';
+          }
+        });
+
+        emailInput.addEventListener('blur', () => {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            document.getElementById('emailError').textContent = 'Please enter a valid email address';
+          }
+        });
+
+        phoneInput.addEventListener('blur', () => {
+          if (phoneInput.value && phoneInput.value.trim()) {
+            const phoneRegex = /^[0-9+\-\s()]{10,15}$/;
+            if (!phoneRegex.test(phoneInput.value)) {
+              document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
+            }
+          }
+        });
+
+        subjectInput.addEventListener('blur', () => {
+          if (subjectInput.value && subjectInput.value.trim().length < 2) {
+            document.getElementById('subjectError').textContent = 'Subject/Specialization must be at least 2 characters long';
+          }
+        });
+
+        experienceInput.addEventListener('blur', () => {
+          const value = parseInt(experienceInput.value);
+          if (experienceInput.value && (value < 0 || value > 50)) {
+            document.getElementById('experienceError').textContent = 'Years of experience must be between 0 and 50';
+          }
+        });
+      }
+    }
+
+    // Initialize trainer manager when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      window.trainerManager = new TrainerManager();
+
+      // Add sample data for testing
+      addSampleTrainers();
+
+      // Setup search functionality
+      setupSearch();
+    });
+
+    // Function to setup search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('trainerSearch');
+      const clearButton = document.getElementById('clearTrainerSearch');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+
+          // Show/hide clear button based on input
+          if (searchTerm.length > 0) {
+            clearButton.style.display = 'block';
+          } else {
+            clearButton.style.display = 'none';
+          }
+
+          const trainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+          const filteredTrainers = trainers.filter(trainer =>
+            trainer.name.toLowerCase().includes(searchTerm) ||
+            trainer.email.toLowerCase().includes(searchTerm) ||
+            trainer.subject.toLowerCase().includes(searchTerm) ||
+            (trainer.courses && trainer.courses.toLowerCase().includes(searchTerm)) ||
+            trainer.status.toLowerCase().includes(searchTerm)
+          );
+          renderFilteredTrainers(filteredTrainers);
+        });
+      }
+    }
+
+    // Function to clear search
+    function clearSearch(searchInputId, tableBodyId) {
+      const searchInput = document.getElementById(searchInputId);
+      const clearButton = document.getElementById('clear' + searchInputId.charAt(0).toUpperCase() + searchInputId.slice(1));
+
+      if (searchInput) {
+        searchInput.value = '';
+        clearButton.style.display = 'none';
+        renderTrainerTable(); // Show all trainers
+      }
+    }
+
+    // Function to open modal
+    function openAddModal(type) {
+      const modal = document.getElementById('modal' + type.charAt(0).toUpperCase() + type.slice(1));
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    // Function to open modal by id
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    // Function to close modal
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Function to render filtered trainers
+    function renderFilteredTrainers(trainers) {
+      const tableBody = document.getElementById('trainerTableBody');
+
+      if (trainers.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: rgba(255,255,255,0.6);">No trainers found matching your search.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = trainers.map(trainer => `
+        <tr>
+          <td>${trainer.name}</td>
+          <td>${trainer.email}</td>
+          <td>${trainer.subject}</td>
+          <td>${trainer.experience} years</td>
+          <td><span class="status ${trainer.status}">${trainer.status}</span></td>
+          <td>
+            <button onclick="editTrainer('${trainer.id}')" class="btn-secondary" style="margin-right: 5px;">Edit</button>
+            <button onclick="deleteTrainer('${trainer.id}')" class="btn-danger">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Function to add sample trainer data
+    function addSampleTrainers() {
+      const sampleTrainers = [
+        {
+          id: 'TRN001',
+          name: 'Dr. Emily Carter',
+          email: 'emily.carter@university.edu',
+          phone: '+1-555-0201',
+          subject: 'Computer Science',
+          courses: 'Web Development, Data Structures',
+          experience: 8,
+          status: 'active',
+          joinDate: '2023-09-01'
+        },
+        {
+          id: 'TRN002',
+          name: 'Prof. Robert Kim',
+          email: 'r.kim@university.edu',
+          phone: '+1-555-0202',
+          subject: 'Mathematics',
+          courses: 'Calculus, Linear Algebra',
+          experience: 12,
+          status: 'active',
+          joinDate: '2022-08-15'
+        },
+        {
+          id: 'TRN003',
+          name: 'Dr. Lisa Thompson',
+          email: 'l.thompson@university.edu',
+          phone: '+1-555-0203',
+          subject: 'Physics',
+          courses: 'Quantum Mechanics, Thermodynamics',
+          experience: 6,
+          status: 'inactive',
+          joinDate: '2023-06-10'
+        }
+      ];
+
+      // Check if sample data already exists
+      const existingTrainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+      if (existingTrainers.length === 0) {
+        localStorage.setItem('trainers', JSON.stringify(sampleTrainers));
+        renderTrainerTable();
+      } else {
+        renderTrainerTable();
+      }
+    }
+
+    // Function to render trainer table
+    function renderTrainerTable() {
+      const trainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+      const tableBody = document.getElementById('trainerTableBody');
+
+      if (trainers.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: rgba(255,255,255,0.6);">No trainers found. Click "Add Trainer" to get started.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = trainers.map(trainer => `
+        <tr>
+          <td>${trainer.name}</td>
+          <td>${trainer.email}</td>
+          <td>${trainer.subject}</td>
+          <td>${trainer.experience} years</td>
+          <td><span class="status ${trainer.status}">${trainer.status}</span></td>
+          <td>
+            <button onclick="editTrainer('${trainer.id}')" class="btn-secondary" style="margin-right: 5px;">Edit</button>
+            <button onclick="deleteTrainer('${trainer.id}')" class="btn-danger">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Function to edit trainer
+    function editTrainer(trainerId) {
+      const trainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+      const trainer = trainers.find(t => t.id === trainerId);
+
+      if (trainer) {
+        document.getElementById('editTrainerId').value = trainer.id;
+        document.getElementById('editTrainerName').value = trainer.name;
+        document.getElementById('editTrainerEmail').value = trainer.email;
+        document.getElementById('editTrainerPhone').value = trainer.phone || '';
+        document.getElementById('editTrainerSubject').value = trainer.subject;
+        document.getElementById('editTrainerCourses').value = trainer.courses || '';
+        document.getElementById('editTrainerExperience').value = trainer.experience || '';
+        document.getElementById('editTrainerStatus').value = trainer.status;
+        document.getElementById('editTrainerJoinDate').value = trainer.joinDate || '';
+
+        openModal('editTrainerModal');
+      } else {
+        alert('Trainer not found!');
+      }
+    }
+
+    // Function to update trainer
+    function updateTrainer() {
+      const trainerId = document.getElementById('editTrainerId').value;
+      const name = document.getElementById('editTrainerName').value.trim();
+      const email = document.getElementById('editTrainerEmail').value.trim();
+      const phone = document.getElementById('editTrainerPhone').value.trim();
+      const subject = document.getElementById('editTrainerSubject').value.trim();
+      const courses = document.getElementById('editTrainerCourses').value.trim();
+      const experience = document.getElementById('editTrainerExperience').value;
+      const status = document.getElementById('editTrainerStatus').value;
+      const joinDate = document.getElementById('editTrainerJoinDate').value;
+
+      // Basic validation
+      if (!name || !email || !subject || !status) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const trainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+      const trainerIndex = trainers.findIndex(t => t.id === trainerId);
+
+      if (trainerIndex !== -1) {
+        trainers[trainerIndex] = {
+          ...trainers[trainerIndex],
+          name,
+          email: email.toLowerCase(),
+          phone,
+          subject,
+          courses,
+          experience: experience ? parseInt(experience) : 0,
+          status,
+          joinDate
+        };
+
+        localStorage.setItem('trainers', JSON.stringify(trainers));
+        renderTrainerTable();
+        closeModal('editTrainerModal');
+        alert('Trainer updated successfully!');
+      } else {
+        alert('Trainer not found!');
+      }
+    }
+
+    // Function to delete trainer
+    function deleteTrainer(trainerId) {
+      if (confirm('Are you sure you want to delete this trainer?')) {
+        const trainers = JSON.parse(localStorage.getItem('trainers') || '[]');
+        const updatedTrainers = trainers.filter(trainer => trainer.id !== trainerId);
+        localStorage.setItem('trainers', JSON.stringify(updatedTrainers));
+        renderTrainerTable();
+        alert('Trainer deleted successfully!');
+      }
+    }
+  </script>
+
+  <!-- Trainer Modal -->
+  <div class="modal" id="modalTrainer">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('modalTrainer')">&times;</span>
+      <h3 id="modalTrainerTitle">Add Trainer</h3>
+
+      <!-- Message Display Area -->
+      <div id="messageContainer"></div>
+
+      <form id="addTrainerForm">
+        <div class="form-row">
+          <label for="trainerName">Name *</label>
+          <input type="text" id="trainerName" name="trainerName" placeholder="Enter trainer name" required minlength="2" maxlength="50" />
+          <div class="field-error" id="nameError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerEmail">Email *</label>
+          <input type="email" id="trainerEmail" name="trainerEmail" placeholder="Enter trainer email" required />
+          <div class="field-error" id="emailError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerPhone">Phone Number</label>
+          <input type="tel" id="trainerPhone" name="trainerPhone" placeholder="Enter phone number (optional)" pattern="[0-9+\-\s()]{10,15}" />
+          <div class="field-error" id="phoneError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerSubject">Subject/Specialization *</label>
+          <input type="text" id="trainerSubject" name="trainerSubject" placeholder="Enter subject or specialization" required />
+          <div class="field-error" id="subjectError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerCourses">Courses Teaching</label>
+          <input type="text" id="trainerCourses" name="trainerCourses" placeholder="Enter courses (comma separated)" />
+          <small style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Example: Web Development, Data Science, Machine Learning</small>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerExperience">Years of Experience</label>
+          <input type="number" id="trainerExperience" name="trainerExperience" placeholder="Enter years of experience" min="0" max="50" />
+          <div class="field-error" id="experienceError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerStatus">Status *</label>
+          <select id="trainerStatus" name="trainerStatus" required>
+            <option value="">Select status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <div class="field-error" id="statusError"></div>
+        </div>
+
+        <div class="form-row">
+          <label for="trainerJoinDate">Join Date</label>
+          <input type="date" id="trainerJoinDate" name="trainerJoinDate" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span class="btn-text">Add Trainer</span>
+            <span class="loading" id="loadingSpinner" style="display: none;"></span>
+          </button>
+          <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div id="editTrainerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('editTrainerModal')">&times;</span>
+      <h3>Edit Trainer</h3>
+      <input type="hidden" id="editTrainerId" />
+      <div class="form-row">
+        <label for="editTrainerName">Name *</label>
+        <input type="text" id="editTrainerName" name="editTrainerName" placeholder="Enter trainer name" required minlength="2" maxlength="50" />
+        <div class="field-error" id="editNameError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerEmail">Email *</label>
+        <input type="email" id="editTrainerEmail" name="editTrainerEmail" placeholder="Enter trainer email" required />
+        <div class="field-error" id="editEmailError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerPhone">Phone Number</label>
+        <input type="tel" id="editTrainerPhone" name="editTrainerPhone" placeholder="Enter phone number (optional)" pattern="[0-9+\-\s()]{10,15}" />
+        <div class="field-error" id="editPhoneError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerSubject">Subject/Specialization *</label>
+        <input type="text" id="editTrainerSubject" name="editTrainerSubject" placeholder="Enter subject or specialization" required />
+        <div class="field-error" id="editSubjectError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerCourses">Courses Teaching</label>
+        <input type="text" id="editTrainerCourses" name="editTrainerCourses" placeholder="Enter courses (comma separated)" />
+        <small style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Example: Web Development, Data Science, Machine Learning</small>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerExperience">Years of Experience</label>
+        <input type="number" id="editTrainerExperience" name="editTrainerExperience" placeholder="Enter years of experience" min="0" max="50" />
+        <div class="field-error" id="editExperienceError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerStatus">Status *</label>
+        <select id="editTrainerStatus" name="editTrainerStatus" required>
+          <option value="">Select status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <div class="field-error" id="editStatusError"></div>
+      </div>
+      <div class="form-row">
+        <label for="editTrainerJoinDate">Join Date</label>
+        <input type="date" id="editTrainerJoinDate" name="editTrainerJoinDate" />
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-primary" id="updateBtn" onclick="updateTrainer()">
+          <span class="btn-text">Update</span>
+          <span class="loading" id="updateLoadingSpinner" style="display: none;"></span>
+        </button>
+        <button type="button" class="btn-secondary" onclick="closeModal('editTrainerModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

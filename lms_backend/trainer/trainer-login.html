@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainer Login - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/auth.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-box">
+      <div class="logo-container">
+        <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="auth-logo">
+      </div>
+
+      <h1 class="auth-title">Trainer Login</h1>
+
+      <form id="trainerLoginForm" class="login-form">
+        <div class="form-group">
+          <label for="trainerUsername">Username</label>
+          <input type="text" id="trainerUsername" placeholder="Enter your username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="trainerPassword">Password</label>
+          <input type="password" id="trainerPassword" placeholder="Enter your password" required>
+        </div>
+
+        <div class="form-options">
+          <label class="show-password">
+            <input type="checkbox" id="showTrainerPassword"> Show Password
+          </label>
+        </div>
+
+        <div id="trainerErrorMessage" class="error-message"></div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="form-footer">
+          <a href="../index.html" class="forgot-password">Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/assets/js/authHelper.js"></script>
+  <script src="/assets/js/trainer-auth.js"></script>
+</body>
+</html>

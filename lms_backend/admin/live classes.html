@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Classes</title>
+  <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script defer src="/assets/js/dashboard.js"></script>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html" class="active"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Live Classes</h1>
+      <div class="profile">
+        <input type="text" placeholder="Search Live Classes...">
+        <button onclick="openModal('addLiveClassModal')">+ Live Class</button>
+      </div>
+    </header>
+
+    <div class="table-container">
+      <h3>Scheduled Live Classes</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Link</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="liveClassesTableBody">
+          <tr>
+            <td>Physics Class</td>
+            <td>20th Sept 2025</td>
+            <td>10:00 AM</td>
+            <td><a href="https://meet.google.com/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>History Session</td>
+            <td>21st Sept 2025</td>
+            <td>3:00 PM</td>
+            <td><a href="https://zoom.us/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Math Live Session</td>
+            <td>22nd Sept 2025</td>
+            <td>11:00 AM</td>
+            <td><a href="https://meet.google.com/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Chemistry Lab</td>
+            <td>23rd Sept 2025</td>
+            <td>2:00 PM</td>
+            <td><a href="https://zoom.us/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>Biology Review</td>
+            <td>24th Sept 2025</td>
+            <td>4:00 PM</td>
+            <td><a href="https://meet.google.com/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+          <tr>
+            <td>CS Workshop</td>
+            <td>25th Sept 2025</td>
+            <td>1:00 PM</td>
+            <td><a href="https://zoom.us/" target="_blank">Join</a></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="addLiveClassModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('addLiveClassModal')">&times;</span>
+      <h3>Schedule Live Class</h3>
+      <input type="text" placeholder="Class Title">
+      <input type="date">
+      <input type="time">
+      <input type="url" placeholder="Meeting Link">
+      <button>Schedule</button>
+    </div>
+  </div>
+
+  <script>
+    function deleteRow(button) {
+      const row = button.parentElement.parentElement;
+      row.remove();
+    }
+  </script>
+</body>
+</html>

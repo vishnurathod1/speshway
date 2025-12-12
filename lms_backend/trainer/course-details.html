@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Course Details - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Course Details</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 id="courseTitle">Loading...</h2>
+      <p id="courseDescription">Loading course details...</p>
+      <button id="backBtn" class="btn-primary">Back to My Courses</button>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Get course title from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseTitle = urlParams.get('title');
+    if (courseTitle) {
+      document.getElementById('courseTitle').textContent = courseTitle;
+
+      // Provide detailed info based on course title
+      const courseDetailsMap = {
+        'Algebra Basics': 'This course covers fundamental algebraic concepts including variables, equations, and functions. It is designed to build a strong foundation for higher-level math.',
+        'Geometry Fundamentals': 'This course explores basic geometry concepts such as shapes, angles, theorems, and proofs. It helps develop spatial reasoning and problem-solving skills.',
+        'Calculus I': 'This introductory calculus course covers limits, derivatives, and integrals. It prepares students for advanced studies in mathematics, science, and engineering.'
+      };
+
+      const description = courseDetailsMap[courseTitle] || 'Detailed information about this course is not available.';
+      document.getElementById('courseDescription').textContent = description;
+    } else {
+      document.getElementById('courseTitle').textContent = 'Course Title Not Found';
+      document.getElementById('courseDescription').textContent = '';
+    }
+
+    // Back button functionality
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'my-courses.html';
+    });
+  </script>
+</body>
+</html>

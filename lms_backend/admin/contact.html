@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Learning - Contact</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .form-section {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #2a2738;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #ff5c5c;
+      font-weight: 700;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      background: #3a3748;
+      color: #fff;
+      font-size: 1rem;
+      resize: vertical;
+      transition: background 0.3s ease;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      background: #4a4560;
+      outline: none;
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn-submit, .btn-reset {
+      background: #ffb800;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #2a2738;
+      box-shadow: 0 6px 22px rgba(255,184,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .btn-submit:hover, .btn-reset:hover {
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo">
+    <ul>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="users.html"><i class="fas fa-users"></i> Users</a></li>
+      <li><a href="courses.html"><i class="fas fa-book"></i> Course management</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="recorded classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="live classes.html"><i class="fas fa-video"></i> live Classes</a></li>
+      <li><a href="assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+      <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      <li><a href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header>
+      <h1>Contact Us</h1>
+    </header>
+
+    <section class="form-section">
+      <h3 style="color: #ffb800;">Contact Information</h3>
+      <p style="color: #ffb800;">Email: support@lms.com</p>
+      <p style="color: #ffb800;">Phone: +1 234 567 8900</p>
+      <p style="color: #ffb800;">Address: 123 Learning St, Education City, Country</p>
+      <p style="color: #ffb800;">Website: www.lms.com</p>
+      <p style="color: #ffb800;">Social Media: @LMSOfficial</p>
+      <p style="color: #ffb800;">Support Hours: Mon-Fri 9AM-6PM</p>
+    </section>
+
+    <section class="form-section">
+      <h3 style="color: #ffb800;">Send Us a Message</h3>
+      <form id="contactForm" class="contact-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Your email address" required />
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="Subject of your message" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">Send Message</button>
+          <button type="reset" class="btn-reset">Reset</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = this.name.value.trim();
+      const email = this.email.value.trim();
+      const subject = this.subject.value.trim();
+      const message = this.message.value.trim();
+
+      if (!name || !email || !subject || !message) {
+        alert('Please fill all fields.');
+        return;
+      }
+
+      alert(`Message sent successfully!\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`);
+      this.reset();
+    });
+  </script>
+</body>
+</html>

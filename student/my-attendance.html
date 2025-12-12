@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Attendance - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html" class="active"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>My Attendance</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>Recent Attendance Records</h2>
+      <div class="table-container">
+        <table id="attendanceTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Course</th>
+              <th>Status</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024-10-01</td>
+              <td>Mathematics</td>
+              <td><span class="status present">Present</span></td>
+              <td>09:00 AM</td>
+            </tr>
+            <tr>
+              <td>2024-10-02</td>
+              <td>Science</td>
+              <td><span class="status present">Present</span></td>
+              <td>10:30 AM</td>
+            </tr>
+            <tr>
+              <td>2024-10-03</td>
+              <td>Mathematics</td>
+              <td><span class="status absent">Absent</span></td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>2024-10-04</td>
+              <td>Science</td>
+              <td><span class="status present">Present</span></td>
+              <td>11:00 AM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" style="margin-top: 40px;">
+      <h2>Monthly Attendance Summary</h2>
+      <div class="form-group" style="max-width: 300px; margin-bottom: 20px;">
+        <label for="monthSelect" style="font-weight: 700; display: block; margin-bottom: 8px; color: #333;">Select Month:</label>
+        <input type="month" id="monthSelect" style="width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 6px; font-size: 16px;" />
+      </div>
+      <div id="monthlyAttendanceContainer" style="background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 700px; display: none;">
+        <h3 style="margin-bottom: 20px; color: #0072ff;">My Attendance in <span id="monthlyMonth"></span></h3>
+        <table id="monthlyAttendanceTable" class="table-container" style="width: 100%; border-collapse: collapse; font-size: 16px;">
+          <thead>
+            <tr style="background-color: #e6f0ff;">
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: center;">Date</th>
+              <th style="padding: 12px; border: 1px solid #ccc; text-align: center;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyAttendanceBody">
+            <!-- Monthly attendance data will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .status.present {
+      color: green;
+      font-weight: bold;
+    }
+    .status.absent {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = '../student/student-login.html';
+    });
+
+    // Monthly attendance summary feature
+    const monthSelect = document.getElementById('monthSelect');
+    const monthlyAttendanceContainer = document.getElementById('monthlyAttendanceContainer');
+    const monthlyAttendanceBody = document.getElementById('monthlyAttendanceBody');
+    const monthlyMonth = document.getElementById('monthlyMonth');
+
+    // Sample attendance data (in a real app, this would come from the server)
+    const sampleAttendance = {
+      '2024-10-01': 'present',
+      '2024-10-02': 'present',
+      '2024-10-03': 'absent',
+      '2024-10-04': 'present',
+      '2024-10-05': 'present',
+      '2024-10-06': 'late',
+      // Add more dates as needed
+    };
+
+    // Load monthly attendance data for selected month
+    function loadMonthlyAttendance() {
+      const month = monthSelect.value; // format: yyyy-mm
+
+      if (!month) {
+        monthlyAttendanceContainer.style.display = 'none';
+        return;
+      }
+
+      monthlyMonth.textContent = month;
+
+      // Clear previous data
+      monthlyAttendanceBody.innerHTML = '';
+
+      // Calculate days in month
+      const [year, monthNum] = month.split('-').map(Number);
+      const daysInMonth = new Date(year, monthNum, 0).getDate();
+
+      // Load attendance data for each day
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const status = sampleAttendance[dateStr] || 'No Data';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="text-align: center; padding: 8px; border: 1px solid #ccc;">${dateStr}</td>
+          <td style="text-align: center; padding: 8px; border: 1px solid #ccc;">${status.charAt(0).toUpperCase() + status.slice(1)}</td>
+        `;
+        monthlyAttendanceBody.appendChild(row);
+      }
+
+      monthlyAttendanceContainer.style.display = 'block';
+    }
+
+    monthSelect.addEventListener('change', loadMonthlyAttendance);
+  </script>
+</body>
+</html>

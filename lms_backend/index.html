@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My LMS - Welcome</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* Body and Canvas */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  background: #1f1c2c;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Landing container */
+.landing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  max-width: 900px;
+  width: 90%;
+  position: relative;
+  z-index: 10;
+}
+
+/* Landing text */
+.landing-content {
+  flex: 1 1 400px;
+  text-align: left;
+  animation: fadeInLeft 1.5s ease-in-out;
+}
+
+.landing-content h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.landing-content h1 span {
+  color: #ff6f61;
+}
+
+.landing-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.btn-group .btn {
+  display: inline-block;
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #fff;
+  background: #ff6f61;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-group .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+.btn-group .btn:nth-child(2) {
+  background: #2196F3;
+  margin-left: 10px;
+}
+
+.btn-group .btn:nth-child(3) {
+  background: #4CAF50;
+  margin-left: 10px;
+}
+
+/* Landing image */
+.landing-image {
+  flex: 1 1 300px;
+  text-align: center;
+  animation: fadeInRight 1.5s ease-in-out;
+}
+
+.landing-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  animation: floatLogo 3s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes fadeInLeft {
+  0% { opacity: 0; transform: translateX(-50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  0% { opacity: 0; transform: translateX(50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .landing { flex-direction: column; text-align: center; }
+  .landing-content { text-align: center; }
+  .btn-group .btn:nth-child(2) { margin-left: 0; margin-top: 10px; }
+  .landing-image { margin-top: 30px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="landing">
+  <div class="landing-content">
+    <h1>Welcome to <span>Happy Learning</span></h1>
+    <p>Streamline your learning management with ease. Manage <strong>students</strong>, <strong>trainers</strong>, <strong>courses</strong>, <strong>materials</strong>, and <strong>analytics</strong> — all in one professional platform.</p>
+    <div class="btn-group">
+      <a href="login.html" class="btn">Login as Admin</a>
+      <a href="trainer/trainer-login.html" class="btn">Login as Trainer</a>
+      <a href="student/student-login.html" class="btn">Login as Student</a>
+      <a href="student/student-register.html" class="btn" style="background: #4CAF50;">Register as Student</a>
+    </div>
+  </div>
+  <div class="landing-image">
+    <!-- 🔽 Replace with your downloaded illustration -->
+    <img src="https://res.cloudinary.com/dh4qek1ty/image/upload/v1758123461/image_1_fphh9f.png" alt="Education Illustration">
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.radius = Math.random() * 3 + 1;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.speedY = (Math.random() - 0.5) * 0.5;
+    this.color = `rgba(255,255,255,${Math.random() * 0.3 + 0.1})`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+function initParticles(num=120) {
+  particles = [];
+  for(let i=0;i<num;i++) particles.push(new Particle());
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(animate);
+}
+
+initParticles();
+animate();
+</script>
+
+
+
+</body>
+</html>

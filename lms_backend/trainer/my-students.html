@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Students - Trainer - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Trainer</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Trainer Dashboard</a></li>
+      <li><a href="my-courses.html"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li>
+      <li><a href="my-students.html" class="active"><i class="fas fa-users"></i> My Students</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>My Students</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>My Students</h2>
+      <div class="form-group" style="max-width: 300px; margin-bottom: 20px;">
+        <label for="courseFilter" style="font-weight: 600; display: block; margin-bottom: 5px;">Filter by Course:</label>
+        <select id="courseFilter" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+          <option value="all">All Courses</option>
+          <option value="algebra-basics">Algebra Basics</option>
+          <option value="geometry-fundamentals">Geometry Fundamentals</option>
+          <option value="calculus-i">Calculus I</option>
+        </select>
+      </div>
+      <table id="studentsTable" class="table-container" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background-color: #f5f5f5;">
+            <th style="padding: 10px; border: 1px solid #ddd;">Name</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Email</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Course</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Status</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Details</th>
+          </tr>
+        </thead>
+        <tbody id="studentsTableBody">
+          <!-- Students will be dynamically loaded here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('trainerLoggedIn');
+      localStorage.removeItem('trainerUsername');
+      window.location.href = '../trainer/trainer-login.html';
+    });
+
+    // Course to students mapping (same as in attendance page)
+    const courseStudents = {
+      'algebra-basics': [
+        { name: 'John Doe', email: 'john@example.com', status: 'Active' },
+        { name: 'Jane Smith', email: 'jane@example.com', status: 'Active' },
+        { name: 'Bob Johnson', email: 'bob@example.com', status: 'Inactive' }
+      ],
+      'geometry-fundamentals': [
+        { name: 'Alice Brown', email: 'alice@example.com', status: 'Active' },
+        { name: 'Charlie Wilson', email: 'charlie@example.com', status: 'Active' },
+        { name: 'Diana Lee', email: 'diana@example.com', status: 'Inactive' }
+      ],
+      'calculus-i': [
+        { name: 'Eve Davis', email: 'eve@example.com', status: 'Active' },
+        { name: 'Frank Miller', email: 'frank@example.com', status: 'Active' },
+        { name: 'Grace Taylor', email: 'grace@example.com', status: 'Inactive' }
+      ]
+    };
+
+    const courseFilter = document.getElementById('courseFilter');
+    const studentsTableBody = document.getElementById('studentsTableBody');
+
+    function loadStudents(course) {
+      studentsTableBody.innerHTML = '';
+      let studentsToShow = [];
+
+      if (course === 'all') {
+        // Show all students from all courses
+        Object.values(courseStudents).forEach(students => {
+          studentsToShow = studentsToShow.concat(students);
+        });
+      } else {
+        studentsToShow = courseStudents[course] || [];
+      }
+
+      studentsToShow.forEach(student => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${student.name}</td>
+          <td>${student.email}</td>
+          <td>${course === 'all' ? getCourseNameForStudent(student.name) : getCourseName(course)}</td>
+          <td>${student.status}</td>
+          <td><a class="btn-primary" title="View student details" href="student-details.html?name=${encodeURIComponent(student.name)}"><i class="fas fa-eye"></i> View</a></td>
+        `;
+        studentsTableBody.appendChild(row);
+      });
+    }
+
+    function getCourseName(courseKey) {
+      const courseNames = {
+        'algebra-basics': 'Algebra Basics',
+        'geometry-fundamentals': 'Geometry Fundamentals',
+        'calculus-i': 'Calculus I'
+      };
+      return courseNames[courseKey] || '';
+    }
+
+    function getCourseNameForStudent(studentName) {
+      for (const [courseKey, students] of Object.entries(courseStudents)) {
+        if (students.some(s => s.name === studentName)) {
+          return getCourseName(courseKey);
+        }
+      }
+      return '';
+    }
+
+    // Load all students initially
+    loadStudents('all');
+
+    // Filter students on course selection change
+    courseFilter.addEventListener('change', (e) => {
+      loadStudents(e.target.value);
+    });
+  </script>
+</body>
+</html>

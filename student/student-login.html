@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Login - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="auth-logo">
+        <h2>Student Login</h2>
+        <p>Welcome back! Please sign in to your account.</p>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter your username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="auth-btn">Login</button>
+      </form>
+      <div class="auth-links">
+        <a href="../reset.html">Forgot Password?</a>
+        <a href="student-register.html">Don't have an account? Register</a>
+      </div>
+      <div class="auth-footer">
+        <p>&copy; 2024 Happy Learning LMS. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+  <script src="/assets/js/student-auth.js"></script>
+</body>
+</html>

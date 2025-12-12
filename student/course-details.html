@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Course Details - Student - Happy Learning</title>
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <h2>Happy Learning - Student</h2>
+    <img src="/assets/images/logo.png" alt="Happy Learning Logo" class="sidebar-logo" />
+    <ul>
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> Student Dashboard</a></li>
+      <li><a href="my-courses.html" class="active"><i class="fas fa-book"></i> My Courses</a></li>
+      <li><a href="my-assignments.html"><i class="fas fa-file-alt"></i> My Assignments</a></li>
+      <li><a href="my-attendance.html"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
+      <li><a href="materials.html"><i class="fas fa-folder"></i> Materials</a></li>
+      <li><a href="live-classes.html"><i class="fas fa-video"></i> Live Classes</a></li>
+      <li><a href="recorded-classes.html"><i class="fas fa-video"></i> Recorded Classes</a></li>
+      <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <h1>Course Details</h1>
+      <div class="header-right">
+        <button id="logoutBtn" class="logout">Logout</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 id="courseTitle">Loading...</h2>
+      <div id="courseDetails">
+        <p><strong>Trainer:</strong> <span id="courseTrainer"></span></p>
+        <p><strong>Duration:</strong> <span id="courseDuration"></span></p>
+        <p><strong>Description:</strong> <span id="courseDescription"></span></p>
+        <p><strong>Progress:</strong> <span id="courseProgress"></span></p>
+        <p><strong>Grade:</strong> <span id="courseGrade"></span></p>
+      </div>
+      <button id="backBtn" class="btn-primary">Back to My Courses</button>
+    </section>
+  </main>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('studentLoggedIn');
+      localStorage.removeItem('studentUsername');
+      window.location.href = 'student-login.html';
+    });
+
+    // Get course title from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseTitle = urlParams.get('title');
+    if (courseTitle) {
+      document.getElementById('courseTitle').textContent = courseTitle;
+
+      // Course details map
+      const courseDetailsMap = {
+        'Mathematics': {
+          trainer: 'John Smith',
+          duration: '3 months',
+          description: 'This course covers fundamental mathematical concepts including algebra, geometry, and calculus. It is designed to build a strong foundation for higher-level math and science courses.',
+          progress: '80%',
+          grade: 'A'
+        },
+        'Science': {
+          trainer: 'Jane Doe',
+          duration: '4 months',
+          description: 'This course explores basic science principles including physics, chemistry, and biology. It helps develop critical thinking and problem-solving skills through hands-on experiments.',
+          progress: '75%',
+          grade: 'B+'
+        }
+      };
+
+      const details = courseDetailsMap[courseTitle];
+      if (details) {
+        document.getElementById('courseTrainer').textContent = details.trainer;
+        document.getElementById('courseDuration').textContent = details.duration;
+        document.getElementById('courseDescription').textContent = details.description;
+        document.getElementById('courseProgress').textContent = details.progress;
+        document.getElementById('courseGrade').textContent = details.grade;
+      } else {
+        document.getElementById('courseDetails').innerHTML = '<p>Detailed information about this course is not available.</p>';
+      }
+    } else {
+      document.getElementById('courseTitle').textContent = 'Course Title Not Found';
+      document.getElementById('courseDetails').innerHTML = '';
+    }
+
+    // Back button functionality
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'my-courses.html';
+    });
+  </script>
+</body>
+</html>
