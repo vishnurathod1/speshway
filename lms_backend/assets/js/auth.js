@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Registered admin login successful');
             localStorage.setItem('adminLoggedIn', 'true');
             localStorage.setItem('adminUsername', username);
-            window.location.href = 'admin/about.html';
+            window.location.href = '/admin/about.html';
         } else if (demoAdmins[username] && demoAdmins[username] === password) {
             console.log('Demo admin login successful');
             localStorage.setItem('adminLoggedIn', 'true');
             localStorage.setItem('adminUsername', username);
-            window.location.href = 'admin/about.html';
+            window.location.href = '/admin/about.html';
         } else {
             console.log('Login failed');
             showError(errorMessage, 'Invalid username or password. Please try again.');
